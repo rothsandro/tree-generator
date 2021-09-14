@@ -7,8 +7,9 @@
     <title>tree generator</title>
   </head>
   <body>
-    <h1>tree generator</h1>
-    <p>it works!</p>
+    <div x-data="tree">
+      <div x-text="JSON.stringify(output, null, 2)"></div>
+    </div>
     <script src="app.ts" type="module"></script>
   </body>
 </html>

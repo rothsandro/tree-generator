@@ -1,5 +1,10 @@
 import { parseInput } from "./core/parser";
+import Alpine from "alpinejs";
 
-const input = "src/";
-const output = parseInput(input);
-console.log("Parsed", output);
+Alpine.data("tree", () => {
+  const input = "src/\nfile.txt";
+  const output = parseInput(input);
+  return { output };
+});
+
+Alpine.start();
