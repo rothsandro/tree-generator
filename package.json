@@ -6,10 +6,11 @@
     "start": "parcel src/index.html --open",
     "build": "parcel build src/index.html --no-source-maps",
     "format": "prettier --write .",
-    "test": "jest",
+    "test": "jest --watch",
+    "test:single": "jest",
     "check": "tsc --strict --noEmit",
     "prepare": "husky install",
-    "ci": "npm run check && npm run test && npm run build"
+    "ci": "npm run check && npm run test:single && npm run build"
   },
   "repository": {
     "type": "git",
