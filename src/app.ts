@@ -1,13 +1,14 @@
 import { parseInput } from "./core/parser";
+import { convertItemsToText } from "./core/output";
 import Alpine from "alpinejs";
 
 Alpine.data("tree", () => ({
   input: "src/\nfile.txt",
-  get output() {
+  get items() {
     return parseInput(this.input);
   },
   get formattedOutput() {
-    return JSON.stringify(this.output, null, 2);
+    return convertItemsToText(this.items);
   },
 }));
 

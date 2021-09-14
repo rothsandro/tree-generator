@@ -18,7 +18,8 @@ export function parseLint(line: string): Item {
   if (isFolder) {
     item = {
       type: ItemType.FOLDER,
-      name: name.slice(0, -1),
+      name,
+      plainName: name.slice(0, -1),
     };
   } else {
     item = {

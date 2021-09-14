@@ -8,6 +8,7 @@ export type Item = FolderItem | FileItem;
 export interface FolderItem {
   type: ItemType.FOLDER;
   name: string;
+  plainName: string;
 }
 
 export interface FileItem {
