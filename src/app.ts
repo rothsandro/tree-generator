@@ -1,11 +1,14 @@
 import { parseInput } from "./core/parser";
 import Alpine from "alpinejs";
 
-Alpine.data("treeGenerator", () => {
-  const input = "src/\nfile.txt";
-  const output = parseInput(input);
-  const formattedOutput = JSON.stringify(output, null, 2);
-  return { input, output, formattedOutput };
-});
+Alpine.data("tree", () => ({
+  input: "src/\nfile.txt",
+  get output() {
+    return parseInput(this.input);
+  },
+  get formattedOutput() {
+    return JSON.stringify(this.output, null, 2);
+  },
+}));
 
 Alpine.start();
