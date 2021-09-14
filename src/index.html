@@ -7,8 +7,9 @@
     <title>tree generator</title>
   </head>
   <body>
-    <div x-data="tree">
-      <div x-text="JSON.stringify(output, null, 2)"></div>
+    <div x-data="treeGenerator">
+      <textarea x-model="input" rows="10"></textarea>
+      <textarea x-bind:value="formattedOutput" rows="10"></textarea>
     </div>
     <script src="app.ts" type="module"></script>
   </body>
