@@ -6,8 +6,10 @@
     "start": "parcel src/index.html --open",
     "build": "parcel build src/index.html --no-source-maps",
     "format": "prettier --write .",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky install"
+    "test": "jest",
+    "check": "tsc --strict --noEmit",
+    "prepare": "husky install",
+    "ci": "npm run check && npm run test && npm run build"
   },
   "repository": {
     "type": "git",
@@ -21,7 +23,11 @@
   },
   "homepage": "https://github.com/rothsandro/tree-generator#readme",
   "devDependencies": {
+    "@babel/preset-env": "^7.15.6",
+    "@babel/preset-typescript": "^7.15.0",
+    "@types/jest": "^27.0.1",
     "husky": "^6.0.0",
+    "jest": "^27.2.0",
     "parcel": "^2.0.0-rc.0",
     "prettier": "2.4.0",
     "pretty-quick": "^3.1.1",
