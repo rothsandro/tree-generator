@@ -1,5 +1,6 @@
 import { Item, ItemType } from "../types/item.types";
 import { convertItemsToText } from "./output";
+import dedent from "dedent";
 
 describe("output", () => {
   it("outputs a file name", () => {
@@ -39,7 +40,39 @@ describe("output", () => {
       { type: ItemType.FILE, name: "file2.txt", level: 0, indent: 0 },
     ];
     const output = convertItemsToText(input);
-    const expected = "src/\nfile1.txt\nfile2.txt";
+    const expected = dedent(`
+      src/
+      file1.txt
+      file2.txt
+    `);
+    expect(output).toBe(expected);
+  });
+
+  it("outputs nested items", () => {
+    const input: Item[] = [
+      {
+        type: ItemType.FOLDER,
+        name: "src/",
+        plainName: "src",
+        level: 0,
+        indent: 0,
+      },
+      {
+        type: ItemType.FOLDER,
+        name: "one/",
+        plainName: "one",
+        level: 1,
+        indent: 0,
+      },
+      { type: ItemType.FILE, name: "file.txt", level: 2, indent: 0 },
+    ];
+    const output = convertItemsToText(input);
+    const expected = dedent(`
+      src/
+        one/
+          file.txt
+    `);
+
     expect(output).toBe(expected);
   });
 });
