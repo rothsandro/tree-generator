@@ -6,11 +6,12 @@ const FOLDER_SUFFIX = "/";
 export function parseInput(input: string) {
   const output = input
     .split(NEW_LINE_SEPARATOR_REGEX)
-    .map((line) => parseLint(line));
+    .filter((line) => line.trim().length > 0)
+    .map((line) => parseLine(line));
   return output;
 }
 
-export function parseLint(line: string): Item {
+export function parseLine(line: string): Item {
   const name = line.trim();
   const isFolder = name.endsWith(FOLDER_SUFFIX);
   let item: Item;

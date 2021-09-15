@@ -60,4 +60,21 @@ describe("parser", () => {
     ];
     expect(output).toEqual(expected);
   });
+
+  it("ignores empty lines between items", () => {
+    const input = "\nsrc/\n  \t\t\t   \nfile.txt\n  ";
+    const output = parseInput(input);
+    const expected: Item[] = [
+      { type: ItemType.FOLDER, name: "src/", plainName: "src" },
+      { type: ItemType.FILE, name: "file.txt" },
+    ];
+    expect(output).toEqual(expected);
+  });
+
+  it("ignores an input with white spaces/tabs and no text", () => {
+    const input = "  \t\t\t   ";
+    const output = parseInput(input);
+    const expected: Item[] = [];
+    expect(output).toEqual(expected);
+  });
 });
