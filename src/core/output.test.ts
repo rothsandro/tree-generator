@@ -3,7 +3,9 @@ import { convertItemsToText } from "./output";
 
 describe("output", () => {
   it("outputs a file name", () => {
-    const input: Item[] = [{ type: ItemType.FILE, name: "file.txt" }];
+    const input: Item[] = [
+      { type: ItemType.FILE, name: "file.txt", level: 0, indent: 0 },
+    ];
     const output = convertItemsToText(input);
     const expected = "file.txt";
     expect(output).toBe(expected);
@@ -11,7 +13,13 @@ describe("output", () => {
 
   it("outputs a folder name", () => {
     const input: Item[] = [
-      { type: ItemType.FOLDER, name: "src/", plainName: "src" },
+      {
+        type: ItemType.FOLDER,
+        name: "src/",
+        plainName: "src",
+        level: 0,
+        indent: 0,
+      },
     ];
     const output = convertItemsToText(input);
     const expected = "src/";
@@ -20,9 +28,15 @@ describe("output", () => {
 
   it("outputs files and folders", () => {
     const input: Item[] = [
-      { type: ItemType.FOLDER, name: "src/", plainName: "src" },
-      { type: ItemType.FILE, name: "file1.txt" },
-      { type: ItemType.FILE, name: "file2.txt" },
+      {
+        type: ItemType.FOLDER,
+        name: "src/",
+        plainName: "src",
+        level: 0,
+        indent: 0,
+      },
+      { type: ItemType.FILE, name: "file1.txt", level: 0, indent: 0 },
+      { type: ItemType.FILE, name: "file2.txt", level: 0, indent: 0 },
     ];
     const output = convertItemsToText(input);
     const expected = "src/\nfile1.txt\nfile2.txt";
