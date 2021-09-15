@@ -1,5 +1,5 @@
-import { ItemType } from "../types/item.types";
 import { parseInput } from "./parser";
+import dedent from "dedent";
 
 function buildInput(...lines: string[]): string {
   return lines.join("\n");
@@ -11,33 +11,33 @@ describe("parser", () => {
     const output = parseInput(input);
 
     expect(output).toHaveLength(1);
-    expect(output[0]).toMatchObject({ type: ItemType.FILE, name: "file.txt" });
+    expect(output[0]).toMatchObject({ name: "file.txt" });
   });
 
-  it("parses a folder", () => {
-    const input = "src/";
+  it("parses a folder with a file", () => {
+    const input = dedent(`
+      src
+        file.txt
+    `);
     const output = parseInput(input);
 
-    expect(output).toHaveLength(1);
-    expect(output[0]).toMatchObject({
-      type: ItemType.FOLDER,
-      name: "src/",
-      plainName: "src",
-    });
+    expect(output).toHaveLength(2);
+    expect(output[0]).toMatchObject({ name: "src", hasChildren: true });
+    expect(output[1]).toMatchObject({ name: "file.txt", hasChildren: false });
   });
 
   it("parses multiple lines", () => {
-    const input = "src/\nfile1.txt\r\nfile2.txt";
+    const input = dedent(`
+      file1.txt
+      file2.txt
+      file3.txt
+    `);
     const output = parseInput(input);
 
     expect(output).toHaveLength(3);
-    expect(output[0]).toMatchObject({
-      type: ItemType.FOLDER,
-      name: "src/",
-      plainName: "src",
-    });
-    expect(output[1]).toMatchObject({ type: ItemType.FILE, name: "file1.txt" });
-    expect(output[2]).toMatchObject({ type: ItemType.FILE, name: "file2.txt" });
+    expect(output[0]).toMatchObject({ name: "file1.txt", hasChildren: false });
+    expect(output[1]).toMatchObject({ name: "file2.txt", hasChildren: false });
+    expect(output[2]).toMatchObject({ name: "file3.txt", hasChildren: false });
   });
 
   it("ignores leading and trailing white spaces for a file name", () => {
@@ -45,15 +45,16 @@ describe("parser", () => {
     const output = parseInput(input);
 
     expect(output).toHaveLength(1);
-    expect(output[0]).toMatchObject({ name: "file.txt" });
+    expect(output[0]).toMatchObject({ name: "file.txt", hasChildren: false });
   });
 
   it("ignores leading and trailing white spaces for a folder name", () => {
-    const input = "   src/    ";
+    const input = "   src    \n         file.txt";
     const output = parseInput(input);
 
-    expect(output).toHaveLength(1);
-    expect(output[0]).toMatchObject({ name: "src/", plainName: "src" });
+    expect(output).toHaveLength(2);
+    expect(output[0]).toMatchObject({ name: "src", hasChildren: true });
+    expect(output[1]).toMatchObject({ name: "file.txt", hasChildren: false });
   });
 
   it("ignores leading and trailing tabs for a file name", () => {
@@ -61,32 +62,25 @@ describe("parser", () => {
     const output = parseInput(input);
 
     expect(output).toHaveLength(1);
-    expect(output[0]).toMatchObject({ name: "file.txt" });
+    expect(output[0]).toMatchObject({ name: "file.txt", hasChildren: false });
   });
 
   it("ignores leading and trailing tabs for a folder name", () => {
-    const input = "\tsrc/\t\t";
-    const output = parseInput(input);
-
-    expect(output).toHaveLength(1);
-    expect(output[0]).toMatchObject({
-      type: ItemType.FOLDER,
-      name: "src/",
-      plainName: "src",
-    });
-  });
-
-  it("ignores empty lines between items", () => {
-    const input = "\nsrc/\n  \t\t\t   \nfile.txt\n  ";
+    const input = "\tsrc\t\t\n  file.txt";
     const output = parseInput(input);
 
     expect(output).toHaveLength(2);
-    expect(output[0]).toMatchObject({
-      type: ItemType.FOLDER,
-      name: "src/",
-      plainName: "src",
-    });
-    expect(output[1]).toMatchObject({ type: ItemType.FILE, name: "file.txt" });
+    expect(output[0]).toMatchObject({ name: "src", hasChildren: true });
+    expect(output[1]).toMatchObject({ name: "file.txt", hasChildren: false });
+  });
+
+  it("ignores empty lines between items", () => {
+    const input = "\nfile1.txt\n  \t\t\t   \nfile2.txt\n  ";
+    const output = parseInput(input);
+
+    expect(output).toHaveLength(2);
+    expect(output[0]).toMatchObject({ name: "file1.txt", hasChildren: false });
+    expect(output[1]).toMatchObject({ name: "file2.txt", hasChildren: false });
   });
 
   it("ignores an input with white spaces/tabs and no text", () => {
@@ -97,7 +91,7 @@ describe("parser", () => {
   });
 
   it("ignores indents on root level", () => {
-    const input = "   src/";
+    const input = "   src";
     const output = parseInput(input);
 
     expect(output).toHaveLength(1);
@@ -106,129 +100,203 @@ describe("parser", () => {
 
   it("parses the level for properly nested children", () => {
     const input = buildInput(
-      "src/", // level 0
+      "src", // level 0
       "  file1.txt", // level 1
       "  file2.txt" // level 2
     );
     const output = parseInput(input);
 
     expect(output).toHaveLength(3);
-    expect(output[0]).toMatchObject({ name: "src/", level: 0 });
-    expect(output[1]).toMatchObject({ name: "file1.txt", level: 1 });
-    expect(output[2]).toMatchObject({ name: "file2.txt", level: 1 });
+    expect(output[0]).toMatchObject({
+      name: "src",
+      level: 0,
+      hasChildren: true,
+    });
+    expect(output[1]).toMatchObject({
+      name: "file1.txt",
+      level: 1,
+      hasChildren: false,
+    });
+    expect(output[2]).toMatchObject({
+      name: "file2.txt",
+      level: 1,
+      hasChildren: false,
+    });
   });
 
   it("parses the level for children with different nesting", () => {
     const input = buildInput(
-      "src/", // level 0
-      "   file1.txt", // level 1
+      "src", // level 0
+      "    file1.txt", // level 1
       "  file2.txt" // level 1
     );
     const output = parseInput(input);
 
     expect(output).toHaveLength(3);
-    expect(output[0]).toMatchObject({ name: "src/", level: 0 });
-    expect(output[1]).toMatchObject({ name: "file1.txt", level: 1 });
-    expect(output[2]).toMatchObject({ name: "file2.txt", level: 1 });
+    expect(output[0]).toMatchObject({
+      name: "src",
+      level: 0,
+      hasChildren: true,
+    });
+    expect(output[1]).toMatchObject({
+      name: "file1.txt",
+      level: 1,
+      hasChildren: false,
+    });
+    expect(output[2]).toMatchObject({
+      name: "file2.txt",
+      level: 1,
+      hasChildren: false,
+    });
   });
 
   it("parses the level for nested children", () => {
     const input = buildInput(
-      "src/", // level 0
-      "   one/", // level 1
-      "     two/", // level 2
+      "src", // level 0
+      "   one", // level 1
+      "     two", // level 2
       "      file.txt" // level 3
     );
     const output = parseInput(input);
 
     expect(output).toHaveLength(4);
-    expect(output[0]).toMatchObject({ name: "src/", level: 0 });
-    expect(output[1]).toMatchObject({ name: "one/", level: 1 });
-    expect(output[2]).toMatchObject({ name: "two/", level: 2 });
-    expect(output[3]).toMatchObject({ name: "file.txt", level: 3 });
+    expect(output[0]).toMatchObject({
+      name: "src",
+      level: 0,
+      hasChildren: true,
+    });
+    expect(output[1]).toMatchObject({
+      name: "one",
+      level: 1,
+      hasChildren: true,
+    });
+    expect(output[2]).toMatchObject({
+      name: "two",
+      level: 2,
+      hasChildren: true,
+    });
+    expect(output[3]).toMatchObject({
+      name: "file.txt",
+      level: 3,
+      hasChildren: false,
+    });
   });
 
   it("parses the level for nested children and siblings", () => {
     const input = buildInput(
-      "src/", // level 0
-      "   one/", // level 1
+      "src", // level 0
+      "   one", // level 1
       "     file1.txt", // level 2
       "   file2.txt" // level 1
     );
     const output = parseInput(input);
 
     expect(output).toHaveLength(4);
-    expect(output[0]).toMatchObject({ name: "src/", level: 0 });
-    expect(output[1]).toMatchObject({ name: "one/", level: 1 });
-    expect(output[2]).toMatchObject({ name: "file1.txt", level: 2 });
-    expect(output[3]).toMatchObject({ name: "file2.txt", level: 1 });
+    expect(output[0]).toMatchObject({
+      name: "src",
+      level: 0,
+      hasChildren: true,
+    });
+    expect(output[1]).toMatchObject({
+      name: "one",
+      level: 1,
+      hasChildren: true,
+    });
+    expect(output[2]).toMatchObject({
+      name: "file1.txt",
+      level: 2,
+      hasChildren: false,
+    });
+    expect(output[3]).toMatchObject({
+      name: "file2.txt",
+      level: 1,
+      hasChildren: false,
+    });
   });
 
   it("parses the level for nested children and siblings with different indents", () => {
     const input = buildInput(
-      "src/", // level 0
-      "   one/", // level 1
+      "src", // level 0
+      "   one", // level 1
       "     file1.txt", // level 2
       " file2.txt" // level 1
     );
     const output = parseInput(input);
 
     expect(output).toHaveLength(4);
-    expect(output[0]).toMatchObject({ name: "src/", level: 0 });
-    expect(output[1]).toMatchObject({ name: "one/", level: 1 });
-    expect(output[2]).toMatchObject({ name: "file1.txt", level: 2 });
-    expect(output[3]).toMatchObject({ name: "file2.txt", level: 1 });
+    expect(output[0]).toMatchObject({
+      name: "src",
+      level: 0,
+      hasChildren: true,
+    });
+    expect(output[1]).toMatchObject({
+      name: "one",
+      level: 1,
+      hasChildren: true,
+    });
+    expect(output[2]).toMatchObject({
+      name: "file1.txt",
+      level: 2,
+      hasChildren: false,
+    });
+    expect(output[3]).toMatchObject({
+      name: "file2.txt",
+      level: 1,
+      hasChildren: false,
+    });
   });
 
   it("parses the level with siblings on root", () => {
     const input = buildInput(
-      "src/", // level 0
-      "  one/", // level 1
-      "two/", // level 0
-      "    file.txt" // level 1
+      "src", // level 0
+      "  file1.txt", // level 1
+      "two", // level 0
+      "    file2.txt" // level 1
     );
     const output = parseInput(input);
 
     expect(output).toHaveLength(4);
-    expect(output[0]).toMatchObject({ name: "src/", level: 0 });
-    expect(output[1]).toMatchObject({ name: "one/", level: 1 });
-    expect(output[2]).toMatchObject({ name: "two/", level: 0 });
-    expect(output[3]).toMatchObject({ name: "file.txt", level: 1 });
-  });
-
-  it("does not nest files in files", () => {
-    const input = buildInput(
-      "src/", // level 0
-      "  file1.txt", // level 1
-      "    file2.txt" // level 1 because it's a file
-    );
-    const output = parseInput(input);
-
-    expect(output).toHaveLength(3);
-    expect(output[0]).toMatchObject({ name: "src/", level: 0 });
-    expect(output[1]).toMatchObject({ name: "file1.txt", level: 1 });
-    expect(output[2]).toMatchObject({ name: "file2.txt", level: 1 });
+    expect(output[0]).toMatchObject({
+      name: "src",
+      level: 0,
+      hasChildren: true,
+    });
+    expect(output[1]).toMatchObject({
+      name: "file1.txt",
+      level: 1,
+      hasChildren: false,
+    });
+    expect(output[2]).toMatchObject({
+      name: "two",
+      level: 0,
+      hasChildren: true,
+    });
+    expect(output[3]).toMatchObject({
+      name: "file2.txt",
+      level: 1,
+      hasChildren: false,
+    });
   });
 
   it("parses nested folders", () => {
     const input = buildInput(
-      "src/", // level 0
-      "  one/", // level 1
-      "      two/", // level 2
-      "    three/", // level 2
-      "        four/", // level 3
-      " five/", // level 1
-      "six/" // level 0
+      "src", // level 0
+      "  one", // level 1
+      "      two", // level 2
+      "    three", // level 2
+      "        four", // level 3
+      " five", // level 1
+      "six" // level 0
     );
     const output = parseInput(input);
 
     expect(output).toHaveLength(7);
-    expect(output[0]).toMatchObject({ name: "src/", level: 0 });
-    expect(output[1]).toMatchObject({ name: "one/", level: 1 });
-    expect(output[2]).toMatchObject({ name: "two/", level: 2 });
-    expect(output[3]).toMatchObject({ name: "three/", level: 2 });
-    expect(output[4]).toMatchObject({ name: "four/", level: 3 });
-    expect(output[5]).toMatchObject({ name: "five/", level: 1 });
-    expect(output[6]).toMatchObject({ name: "six/", level: 0 });
+    expect(output[0]).toMatchObject({ name: "src", level: 0 });
+    expect(output[1]).toMatchObject({ name: "one", level: 1 });
+    expect(output[2]).toMatchObject({ name: "two", level: 2 });
+    expect(output[3]).toMatchObject({ name: "three", level: 2 });
+    expect(output[4]).toMatchObject({ name: "four", level: 3 });
+    expect(output[5]).toMatchObject({ name: "five", level: 1 });
+    expect(output[6]).toMatchObject({ name: "six", level: 0 });
   });
 });

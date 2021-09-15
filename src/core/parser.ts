@@ -1,7 +1,6 @@
-import { Item, ItemType } from "../types/item.types";
+import { Item } from "../types/item.types";
 
 const NEW_LINE_SEPARATOR_REGEX = /\r?\n/;
-const FOLDER_SUFFIX = "/";
 
 export function parseInput(input: string): Item[] {
   const items = input
@@ -14,42 +13,29 @@ export function parseInput(input: string): Item[] {
 }
 
 export function calculateLevel(items: Item[]): Item[] {
-  const itemsWithLevel: Item[] = [];
+  const itemsWithLevelInReverseOrder: Item[] = [];
 
   for (let item of items) {
-    const parentFolder = itemsWithLevel.find(
-      (itemWithLevel) =>
-        itemWithLevel.type === ItemType.FOLDER &&
-        itemWithLevel.indent < item.indent
+    const parentItem = itemsWithLevelInReverseOrder.find(
+      (itemWithLevel) => itemWithLevel.indent < item.indent
     );
 
-    const level = parentFolder ? parentFolder.level + 1 : 0;
-    itemsWithLevel.unshift({ ...item, level });
+    const level = parentItem ? parentItem.level + 1 : 0;
+    itemsWithLevelInReverseOrder.unshift({ ...item, level });
   }
 
-  return itemsWithLevel.reverse();
+  const itemsWithLevel = itemsWithLevelInReverseOrder.reverse();
+  itemsWithLevel.forEach((item, idx, list) => {
+    const nextItem = list[idx + 1];
+    item.hasChildren = !!(nextItem?.level > item.level);
+  });
+
+  return itemsWithLevel;
 }
 
 export function parseLine(line: string): Item {
   const name = line.trim();
-  const isFolder = name.endsWith(FOLDER_SUFFIX);
   const indent = line.length - line.trimStart().length;
-  let item: Item;
-
-  if (isFolder) {
-    item = {
-      type: ItemType.FOLDER,
-      name,
-      plainName: name.slice(0, -1),
-      indent,
-    };
-  } else {
-    item = {
-      type: ItemType.FILE,
-      name,
-      indent,
-    };
-  }
-
+  const item: Item = { name, indent };
   return item;
 }
