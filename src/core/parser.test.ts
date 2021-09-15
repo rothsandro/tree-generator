@@ -44,4 +44,20 @@ describe("parser", () => {
     ];
     expect(output).toEqual(expected);
   });
+
+  it("ignores leading and trailing tabs for a file", () => {
+    const input = "\tfile.txt\t\t";
+    const output = parseInput(input);
+    const expected: Item[] = [{ type: ItemType.FILE, name: "file.txt" }];
+    expect(output).toEqual(expected);
+  });
+
+  it("ignores leading and trailing tabs for a folder", () => {
+    const input = "\tsrc/\t\t";
+    const output = parseInput(input);
+    const expected: Item[] = [
+      { type: ItemType.FOLDER, name: "src/", plainName: "src" },
+    ];
+    expect(output).toEqual(expected);
+  });
 });
