@@ -20,9 +20,22 @@ describe("output", () => {
     ];
     const output = convertItemsToText(input);
     const expected = dedent(`
-      src
+      src/
         file1.txt
         file2.txt
+    `);
+    expect(output).toBe(expected);
+  });
+
+  it("does not add a slash to a folder if is already present", () => {
+    const input: Item[] = [
+      { name: "src/", level: 0, indent: 0, hasChildren: true },
+      { name: "file.txt", level: 1, indent: 0, hasChildren: false },
+    ];
+    const output = convertItemsToText(input);
+    const expected = dedent(`
+      src/
+        file.txt
     `);
     expect(output).toBe(expected);
   });
@@ -31,12 +44,12 @@ describe("output", () => {
     const input: Item[] = [
       { name: "src", level: 0, indent: 0, hasChildren: true },
       { name: "one", level: 1, indent: 0, hasChildren: true },
-      { name: "file.txt", level: 2, indent: 0, hasChildren: true },
+      { name: "file.txt", level: 2, indent: 0, hasChildren: false },
     ];
     const output = convertItemsToText(input);
     const expected = dedent(`
-      src
-        one
+      src/
+        one/
           file.txt
     `);
 
