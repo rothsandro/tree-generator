@@ -7,11 +7,10 @@ export function parseInput(input: string): ItemWithHierarchy[] {
     .split(NEW_LINE_SEPARATOR_REGEX)
     .filter((line) => line.trim().length > 0)
     .map((line) => parseLine(line));
-
   return calculateLevel(items);
 }
 
-export function calculateLevel(items: Item[]): ItemWithHierarchy[] {
+function calculateLevel(items: Item[]): ItemWithHierarchy[] {
   const itemsWithLevelInReverseOrder: ItemWithHierarchy[] = [];
 
   for (let item of items) {
@@ -36,7 +35,7 @@ export function calculateLevel(items: Item[]): ItemWithHierarchy[] {
   return itemsWithLevel;
 }
 
-export function parseLine(line: string): Item {
+function parseLine(line: string): Item {
   const name = line.trim();
   const indent = line.length - line.trimStart().length;
   const item: Item = { name, indent };

@@ -11,19 +11,21 @@ const ASCII_MAPPING: Record<Ascii, string> = {
 
 export function convertItemsToText(items: ItemWithHierarchy[]): string {
   return addAsciiCodes(items)
-    .map((item) => {
-      const suffix = item.hasChildren ? FOLDER_SUFFIX : "";
-      const asciiCodes = item.ascii
-        .map((ascii) => ASCII_MAPPING[ascii])
-        .join("");
-      return (
-        asciiCodes + item.name + (item.name.endsWith(suffix) ? "" : suffix)
-      );
-    })
+    .map((item) => `${getAsciiString(item)}${item.name}${getSuffix(item)}`)
     .join(NEW_LINE_SEPARATOR);
 }
 
-export function addAsciiCodes(items: ItemWithHierarchy[]): ItemWithAscii[] {
+function getAsciiString(item: ItemWithAscii): string {
+  return item.ascii.map((ascii) => ASCII_MAPPING[ascii]).join("");
+}
+
+function getSuffix(item: ItemWithHierarchy): string {
+  if (!item.hasChildren) return "";
+  if (item.name.endsWith(FOLDER_SUFFIX)) return "";
+  return FOLDER_SUFFIX;
+}
+
+function addAsciiCodes(items: ItemWithHierarchy[]): ItemWithAscii[] {
   const result: ItemWithAscii[] = [];
 
   for (let idx = 0; idx < items.length; idx++) {
