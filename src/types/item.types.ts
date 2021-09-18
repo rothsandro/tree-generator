@@ -1,11 +1,14 @@
 export interface Item {
   name: string;
   indent: number;
-  level?: number;
-  hasChildren?: boolean;
 }
 
-export interface ItemWithAscii extends Item {
+export interface ItemWithHierarchy extends Item {
+  level: number;
+  hasChildren: boolean;
+}
+
+export interface ItemWithAscii extends ItemWithHierarchy {
   ascii: Ascii[];
 }
 

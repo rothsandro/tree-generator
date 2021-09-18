@@ -1,10 +1,10 @@
-import { Item } from "../types/item.types";
+import { Item, ItemWithHierarchy } from "../types/item.types";
 import { convertItemsToText } from "./output";
 import dedent from "dedent";
 
 describe("output", () => {
   it("outputs a file name", () => {
-    const input: Item[] = [
+    const input: ItemWithHierarchy[] = [
       { name: "file.txt", level: 0, indent: 0, hasChildren: false },
     ];
     const output = convertItemsToText(input);
@@ -13,7 +13,7 @@ describe("output", () => {
   });
 
   it("outputs a folder with files", () => {
-    const input: Item[] = [
+    const input: ItemWithHierarchy[] = [
       { name: "src", level: 0, indent: 0, hasChildren: true },
       { name: "file1.txt", level: 1, indent: 0, hasChildren: false },
       { name: "file2.txt", level: 1, indent: 0, hasChildren: false },
@@ -28,7 +28,7 @@ describe("output", () => {
   });
 
   it("does not add a slash to a folder if is already present", () => {
-    const input: Item[] = [
+    const input: ItemWithHierarchy[] = [
       { name: "src/", level: 0, indent: 0, hasChildren: true },
       { name: "file.txt", level: 1, indent: 0, hasChildren: false },
     ];
@@ -41,7 +41,7 @@ describe("output", () => {
   });
 
   it("outputs nested folders", () => {
-    const input: Item[] = [
+    const input: ItemWithHierarchy[] = [
       { name: "src", level: 0, indent: 0, hasChildren: true },
       { name: "one", level: 1, indent: 0, hasChildren: true },
       { name: "file.txt", level: 2, indent: 0, hasChildren: false },
@@ -57,7 +57,7 @@ describe("output", () => {
   });
 
   it("outputs nested folders with siblings", () => {
-    const input: Item[] = [
+    const input: ItemWithHierarchy[] = [
       { name: "src", level: 0, indent: 0, hasChildren: true },
       { name: "one", level: 1, indent: 0, hasChildren: true },
       { name: "file1.txt", level: 2, indent: 0, hasChildren: false },
@@ -83,7 +83,7 @@ describe("output", () => {
   });
 
   it("outputs deeply nested folders with siblings", () => {
-    const input: Item[] = [
+    const input: ItemWithHierarchy[] = [
       { name: "src", level: 0, indent: 0, hasChildren: true },
       { name: "one", level: 1, indent: 0, hasChildren: true },
       { name: "one-a", level: 2, indent: 0, hasChildren: true },
@@ -111,7 +111,7 @@ describe("output", () => {
   });
 
   it("outputs nested folders with multiple folders on root", () => {
-    const input: Item[] = [
+    const input: ItemWithHierarchy[] = [
       { name: "src", level: 0, indent: 0, hasChildren: true },
       { name: "one", level: 1, indent: 0, hasChildren: true },
       { name: "two", level: 2, indent: 0, hasChildren: false },

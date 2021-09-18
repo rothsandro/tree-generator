@@ -1,4 +1,4 @@
-import { Item, Ascii, ItemWithAscii } from "../types/item.types";
+import { Ascii, ItemWithAscii, ItemWithHierarchy } from "../types/item.types";
 
 const NEW_LINE_SEPARATOR = "\n";
 const FOLDER_SUFFIX = "/";
@@ -9,7 +9,7 @@ const ASCII_MAPPING: Record<Ascii, string> = {
   [Ascii.PATH]: "│  ",
 };
 
-export function convertItemsToText(items: Item[]): string {
+export function convertItemsToText(items: ItemWithHierarchy[]): string {
   return addAsciiCodes(items)
     .map((item) => {
       const suffix = item.hasChildren ? FOLDER_SUFFIX : "";
@@ -23,7 +23,7 @@ export function convertItemsToText(items: Item[]): string {
     .join(NEW_LINE_SEPARATOR);
 }
 
-export function addAsciiCodes(items: Item[]): ItemWithAscii[] {
+export function addAsciiCodes(items: ItemWithHierarchy[]): ItemWithAscii[] {
   const result: ItemWithAscii[] = [];
 
   for (let idx = 0; idx < items.length; idx++) {
@@ -47,7 +47,7 @@ export function addAsciiCodes(items: Item[]): ItemWithAscii[] {
   return result;
 }
 
-function findSiblings(items: Item[], itemIdx: number): boolean {
+function findSiblings(items: ItemWithHierarchy[], itemIdx: number): boolean {
   const mainLevel = items[itemIdx].level;
   for (let idx = itemIdx + 1; idx < items.length; idx++) {
     const level = items[idx].level;
@@ -58,7 +58,10 @@ function findSiblings(items: Item[], itemIdx: number): boolean {
   return false;
 }
 
-function findSubsequentLevels(items: Item[], itemIdx: number): number[] {
+function findSubsequentLevels(
+  items: ItemWithHierarchy[],
+  itemIdx: number
+): number[] {
   const minLevel = 1;
   let maxLevel = items[itemIdx].level - 1;
   const levels = new Set<number>();
