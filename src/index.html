@@ -9,7 +9,11 @@
   <body>
     <div x-data="tree">
       <textarea x-model="input" rows="10"></textarea>
-      <textarea x-bind:value="formattedOutput" rows="10"></textarea>
+      <textarea
+        x-bind:value="formattedOutput"
+        rows="10"
+        style="font-family: Consolas, 'Courier New', Courier, monospace"
+      ></textarea>
     </div>
     <script src="app.ts" type="module"></script>
   </body>

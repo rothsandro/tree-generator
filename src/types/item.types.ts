@@ -3,4 +3,12 @@ export interface Item {
   indent: number;
   level?: number;
   hasChildren?: boolean;
+  ascii?: Ascii[];
+}
+
+export enum Ascii {
+  CHILD = "CHILD",
+  LAST_CHILD = "LAST_CHILD",
+  INDENT = "INDENT",
+  PATH = "PATH",
 }

@@ -21,8 +21,8 @@ describe("output", () => {
     const output = convertItemsToText(input);
     const expected = dedent(`
       src/
-        file1.txt
-        file2.txt
+      ├──file1.txt
+      └──file2.txt
     `);
     expect(output).toBe(expected);
   });
@@ -35,7 +35,7 @@ describe("output", () => {
     const output = convertItemsToText(input);
     const expected = dedent(`
       src/
-        file.txt
+      └──file.txt
     `);
     expect(output).toBe(expected);
   });
@@ -49,8 +49,84 @@ describe("output", () => {
     const output = convertItemsToText(input);
     const expected = dedent(`
       src/
-        one/
-          file.txt
+      └──one/
+         └──file.txt
+    `);
+
+    expect(output).toBe(expected);
+  });
+
+  it("outputs nested folders with siblings", () => {
+    const input: Item[] = [
+      { name: "src", level: 0, indent: 0, hasChildren: true },
+      { name: "one", level: 1, indent: 0, hasChildren: true },
+      { name: "file1.txt", level: 2, indent: 0, hasChildren: false },
+      { name: "two", level: 1, indent: 0, hasChildren: true },
+      { name: "file2.txt", level: 2, indent: 0, hasChildren: false },
+      { name: "file3.txt", level: 2, indent: 0, hasChildren: false },
+      { name: "three", level: 1, indent: 0, hasChildren: true },
+      { name: "file4.txt", level: 2, indent: 0, hasChildren: false },
+    ];
+    const output = convertItemsToText(input);
+    const expected = dedent(`
+      src/
+      ├──one/
+      │  └──file1.txt
+      ├──two/
+      │  ├──file2.txt
+      │  └──file3.txt
+      └──three/
+         └──file4.txt
+    `);
+
+    expect(output).toBe(expected);
+  });
+
+  it("outputs deeply nested folders with siblings", () => {
+    const input: Item[] = [
+      { name: "src", level: 0, indent: 0, hasChildren: true },
+      { name: "one", level: 1, indent: 0, hasChildren: true },
+      { name: "one-a", level: 2, indent: 0, hasChildren: true },
+      { name: "file1.txt", level: 3, indent: 0, hasChildren: false },
+      { name: "file2.txt", level: 3, indent: 0, hasChildren: false },
+      { name: "one-b", level: 2, indent: 0, hasChildren: true },
+      { name: "file3.txt", level: 3, indent: 0, hasChildren: false },
+      { name: "two", level: 1, indent: 0, hasChildren: true },
+      { name: "file4.txt", level: 2, indent: 0, hasChildren: false },
+    ];
+    const output = convertItemsToText(input);
+    const expected = dedent(`
+      src/
+      ├──one/
+      │  ├──one-a/
+      │  │  ├──file1.txt
+      │  │  └──file2.txt
+      │  └──one-b/
+      │     └──file3.txt
+      └──two/
+         └──file4.txt
+    `);
+
+    expect(output).toBe(expected);
+  });
+
+  it("outputs nested folders with multiple folders on root", () => {
+    const input: Item[] = [
+      { name: "src", level: 0, indent: 0, hasChildren: true },
+      { name: "one", level: 1, indent: 0, hasChildren: true },
+      { name: "two", level: 2, indent: 0, hasChildren: false },
+      { name: "public", level: 0, indent: 0, hasChildren: true },
+      { name: "assets", level: 1, indent: 0, hasChildren: true },
+      { name: "img.png", level: 2, indent: 0, hasChildren: false },
+    ];
+    const output = convertItemsToText(input);
+    const expected = dedent(`
+      src/
+      └──one/
+         └──two
+      public/
+      └──assets/
+         └──img.png
     `);
 
     expect(output).toBe(expected);
