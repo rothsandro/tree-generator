@@ -3,7 +3,10 @@ export interface Item {
   indent: number;
   level?: number;
   hasChildren?: boolean;
-  ascii?: Ascii[];
+}
+
+export interface ItemWithAscii extends Item {
+  ascii: Ascii[];
 }
 
 export enum Ascii {

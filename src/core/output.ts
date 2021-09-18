@@ -1,4 +1,4 @@
-import { Item, Ascii } from "../types/item.types";
+import { Item, Ascii, ItemWithAscii } from "../types/item.types";
 
 const NEW_LINE_SEPARATOR = "\n";
 const FOLDER_SUFFIX = "/";
@@ -13,8 +13,9 @@ export function convertItemsToText(items: Item[]): string {
   return addAsciiCodes(items)
     .map((item) => {
       const suffix = item.hasChildren ? FOLDER_SUFFIX : "";
-      const ascii = item.ascii || [];
-      const asciiCodes = ascii.map((ascii) => ASCII_MAPPING[ascii]).join("");
+      const asciiCodes = item.ascii
+        .map((ascii) => ASCII_MAPPING[ascii])
+        .join("");
       return (
         asciiCodes + item.name + (item.name.endsWith(suffix) ? "" : suffix)
       );
@@ -22,8 +23,8 @@ export function convertItemsToText(items: Item[]): string {
     .join(NEW_LINE_SEPARATOR);
 }
 
-export function addAsciiCodes(items: Item[]): Item[] {
-  const result: Item[] = [];
+export function addAsciiCodes(items: Item[]): ItemWithAscii[] {
+  const result: ItemWithAscii[] = [];
 
   for (let idx = 0; idx < items.length; idx++) {
     const item = items[idx];
