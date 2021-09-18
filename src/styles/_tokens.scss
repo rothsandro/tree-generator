@@ -1,0 +1,94 @@
+@use "sass:math";
+
+@function from-px($px) {
+  @return (math.div($px, 16)) + "rem";
+}
+
+:root {
+  --tg-spacing-0: #{from-px(0)};
+  --tg-spacing-1: #{from-px(4)};
+  --tg-spacing-2: #{from-px(8)};
+  --tg-spacing-3: #{from-px(12)};
+  --tg-spacing-4: #{from-px(16)};
+  --tg-spacing-5: #{from-px(24)};
+  --tg-spacing-6: #{from-px(32)};
+  --tg-spacing-7: #{from-px(48)};
+
+  --indigo1: hsl(225 60% 99.4%);
+  --indigo2: hsl(223 100% 98.6%);
+  --indigo3: hsl(223 98.4% 97.1%);
+  --indigo4: hsl(223 92.9% 95%);
+  --indigo5: hsl(224 87.1% 92%);
+  --indigo6: hsl(224 81.9% 87.8%);
+  --indigo7: hsl(225 77.4% 82.1%);
+  --indigo8: hsl(226 75.4% 74.5%);
+  --indigo9: hsl(226 70% 55.5%);
+  --indigo10: hsl(226 58.6% 51.3%);
+  --indigo11: hsl(226 55% 45%);
+  --indigo12: hsl(226 62% 17%);
+
+  --tg-primary1: var(--indigo1);
+  --tg-primary2: var(--indigo2);
+  --tg-primary3: var(--indigo3);
+  --tg-primary4: var(--indigo4);
+  --tg-primary5: var(--indigo5);
+  --tg-primary6: var(--indigo6);
+  --tg-primary7: var(--indigo7);
+  --tg-primary8: var(--indigo8);
+  --tg-primary9: var(--indigo9);
+  --tg-primary10: var(--indigo10);
+  --tg-primary11: var(--indigo11);
+  --tg-primary12: var(--indigo112);
+
+  --tg-primary-bg-app: var(--tg-primary1);
+  --tg-primary-bg-subtle: var(--tg-primary2);
+  --tg-primary-bg: var(--tg-primary3);
+  --tg-primary-bg-hover: var(--tg-primary4);
+  --tg-primary-bg-active: var(--tg-primary5);
+  --tg-primary-border-subtle: var(--tg-primary6);
+  --tg-primary-border: var(--tg-primary7);
+  --tg-primary-border-hover: var(--tg-primary8);
+  --tg-primary-bg-solid: var(--tg-primary9);
+  --tg-primary-bg-sold-hover: var(--tg-primary10);
+  --tg-primary-text-low: var(--tg-primary11);
+  --tg-primary-text-high: var(--tg-primary12);
+
+  --slate1: hsl(206 30% 98.8%);
+  --slate2: hsl(210 16.7% 97.6%);
+  --slate3: hsl(209 13.3% 95.3%);
+  --slate4: hsl(209 12.2% 93.2%);
+  --slate5: hsl(208 11.7% 91.1%);
+  --slate6: hsl(208 11.3% 88.9%);
+  --slate7: hsl(207 11.1% 85.9%);
+  --slate8: hsl(205 10.7% 78%);
+  --slate9: hsl(206 6% 56.1%);
+  --slate10: hsl(206 5.8% 52.3%);
+  --slate11: hsl(206 6% 43.5%);
+  --slate12: hsl(206 24% 9%);
+
+  --tg-neutral1: var(--slate1);
+  --tg-neutral2: var(--slate2);
+  --tg-neutral3: var(--slate3);
+  --tg-neutral4: var(--slate4);
+  --tg-neutral5: var(--slate5);
+  --tg-neutral6: var(--slate6);
+  --tg-neutral7: var(--slate7);
+  --tg-neutral8: var(--slate8);
+  --tg-neutral9: var(--slate9);
+  --tg-neutral10: var(--slate10);
+  --tg-neutral11: var(--slate11);
+  --tg-neutral12: var(--slate112);
+
+  --tg-neutral-bg-app: var(--tg-neutral1);
+  --tg-neutral-bg-subtle: var(--tg-neutral2);
+  --tg-neutral-bg: var(--tg-neutral3);
+  --tg-neutral-bg-hover: var(--tg-neutral4);
+  --tg-neutral-bg-active: var(--tg-neutral5);
+  --tg-neutral-border-subtle: var(--tg-neutral6);
+  --tg-neutral-border: var(--tg-neutral7);
+  --tg-neutral-border-hover: var(--tg-neutral8);
+  --tg-neutral-bg-solid: var(--tg-neutral9);
+  --tg-neutral-bg-solid-hover: var(--tg-neutral10);
+  --tg-neutral-text-low: var(--tg-neutral11);
+  --tg-neutral-text-high: var(--tg-neutral12);
+}
