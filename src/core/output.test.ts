@@ -182,4 +182,30 @@ describe("output:comments", () => {
 
     expect(output).toBe(expected);
   });
+
+  it("aligns comments when alignComments is true", () => {
+    const input: ItemWithHierarchy[] = [
+      {
+        name: "src",
+        level: 0,
+        indent: 0,
+        hasChildren: true,
+        comment: "a folder",
+      },
+      {
+        name: "file.txt",
+        level: 1,
+        indent: 0,
+        hasChildren: false,
+        comment: "a file",
+      },
+    ];
+    const output = convertItemsToText(input, { alignComments: true });
+    const expected = dedent(`
+      src/          # a folder
+      └── file.txt  # a file
+    `);
+
+    expect(output).toBe(expected);
+  });
 });

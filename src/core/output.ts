@@ -18,10 +18,10 @@ export function convertItemsToText(
   const finalItems = pipe(
     items,
     addSuffix,
-    addComment,
     config.rootElement ? addRootElement : noop,
     addAsciiCodes,
-    addAsciiStringsToName
+    addAsciiStringsToName,
+    (value) => addComment(value, config.alignComments)
   );
 
   return finalItems.map((item) => item.name).join(NEW_LINE_SEPARATOR);
@@ -59,10 +59,19 @@ function addSuffix(items: ItemWithHierarchy[]): ItemWithHierarchy[] {
   });
 }
 
-function addComment(items: ItemWithHierarchy[]): ItemWithHierarchy[] {
+function addComment(
+  items: ItemWithHierarchy[],
+  align: boolean
+): ItemWithHierarchy[] {
+  const maxLength = align
+    ? Math.max(...items.map((item) => item.name.length))
+    : 0;
+
   return items.map((item) => {
     if (!item.comment) return item;
-    return { ...item, name: `${item.name}  # ${item.comment}` };
+    const name = item.name.padEnd(maxLength, " ");
+    const nameWithComment = `${name}  # ${item.comment}`;
+    return { ...item, name: nameWithComment };
   });
 }
 
