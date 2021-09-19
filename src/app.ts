@@ -20,7 +20,7 @@ Alpine.data("treeUrlStore", function () {
       try {
         const data = window.location.hash.substr(1);
         if (!data) return null;
-        const store = pipe(data, decodeURIComponent, atob, JSON.parse);
+        const store = pipe(data, atob, escape, decodeURIComponent, JSON.parse);
         const input: string = store.input || "";
         const treeConfig: TreeConfig = store.treeConfig || {};
         return { input, treeConfig };
@@ -28,10 +28,23 @@ Alpine.data("treeUrlStore", function () {
         return null;
       }
     },
-    writeToStore(input: string, treeConfig: TreeConfig) {
+    buildData(input: string, treeConfig: TreeConfig) {
       const store = { input, treeConfig };
-      const data = pipe(store, JSON.stringify, btoa, encodeURIComponent);
-      window.history.replaceState(undefined, "", `#${data}`);
+      const data = pipe(
+        store,
+        JSON.stringify,
+        encodeURIComponent,
+        unescape,
+        btoa
+      );
+      return data;
+    },
+    writeToStore(input: string, treeConfig: TreeConfig) {
+      window.history.replaceState(
+        undefined,
+        "",
+        `#${this.buildData(input, treeConfig)}`
+      );
     },
     init() {
       this.autoUpdateStore = !!this.readFromStore();
