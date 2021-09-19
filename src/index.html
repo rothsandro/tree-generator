@@ -30,7 +30,11 @@
           </div>
         </div>
         <div class="tree-actions">
-          <button class="btn btn--primary" @click="copy(formattedOutput)">
+          <button
+            class="btn btn--primary"
+            @click="copy(formattedOutput)"
+            :disabled="formattedOutput.length === 0"
+          >
             <span>Copy</span>
             <template x-if="copied">
               <span class="icon-overlay">
