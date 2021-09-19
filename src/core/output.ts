@@ -1,4 +1,6 @@
+import { TreeConfig } from "../types/config.types";
 import { Ascii, ItemWithAscii, ItemWithHierarchy } from "../types/item.types";
+import { noop, pipe } from "../utils/pipe";
 
 const NEW_LINE_SEPARATOR = "\n";
 const FOLDER_SUFFIX = "/";
@@ -9,20 +11,51 @@ const ASCII_MAPPING: Record<Ascii, string> = {
   [Ascii.PATH]: "│   ",
 };
 
-export function convertItemsToText(items: ItemWithHierarchy[]): string {
-  return addAsciiCodes(items)
-    .map((item) => `${getAsciiString(item)}${item.name}${getSuffix(item)}`)
-    .join(NEW_LINE_SEPARATOR);
+export function convertItemsToText(
+  items: ItemWithHierarchy[],
+  config: TreeConfig = {}
+): string {
+  const finalItems = pipe(
+    items,
+    addSuffix,
+    config.rootElement ? addRootElement : noop,
+    addAsciiCodes,
+    addAsciiStringsToName
+  );
+
+  return finalItems.map((item) => item.name).join(NEW_LINE_SEPARATOR);
+}
+
+function addRootElement(items: ItemWithHierarchy[]) {
+  if (items.length === 0) return items;
+
+  const root: ItemWithHierarchy = {
+    name: ".",
+    indent: 0,
+    level: 0,
+    hasChildren: true,
+  };
+  const children = items.map((item) => ({ ...item, level: item.level + 1 }));
+  return [root, ...children];
+}
+
+function addAsciiStringsToName(items: ItemWithAscii[]): ItemWithAscii[] {
+  return items.map((item) => ({
+    ...item,
+    name: `${getAsciiString(item)}${item.name}`,
+  }));
 }
 
 function getAsciiString(item: ItemWithAscii): string {
   return item.ascii.map((ascii) => ASCII_MAPPING[ascii]).join("");
 }
 
-function getSuffix(item: ItemWithHierarchy): string {
-  if (!item.hasChildren) return "";
-  if (item.name.endsWith(FOLDER_SUFFIX)) return "";
-  return FOLDER_SUFFIX;
+function addSuffix(items: ItemWithHierarchy[]): ItemWithHierarchy[] {
+  return items.map((item) => {
+    if (!item.hasChildren) return item;
+    if (item.name.endsWith(FOLDER_SUFFIX)) return item;
+    return { ...item, name: `${item.name}${FOLDER_SUFFIX}` };
+  });
 }
 
 function addAsciiCodes(items: ItemWithHierarchy[]): ItemWithAscii[] {

@@ -2,7 +2,7 @@ import { ItemWithHierarchy } from "../types/item.types";
 import { convertItemsToText } from "./output";
 import dedent from "dedent";
 
-describe("output", () => {
+describe("output:basics", () => {
   it("outputs a file name", () => {
     const input: ItemWithHierarchy[] = [
       { name: "file.txt", level: 0, indent: 0, hasChildren: false },
@@ -39,7 +39,9 @@ describe("output", () => {
     `);
     expect(output).toBe(expected);
   });
+});
 
+describe("output:nesting", () => {
   it("outputs nested folders", () => {
     const input: ItemWithHierarchy[] = [
       { name: "src", level: 0, indent: 0, hasChildren: true },
@@ -127,6 +129,27 @@ describe("output", () => {
       public/
       └── assets/
           └── img.png
+    `);
+
+    expect(output).toBe(expected);
+  });
+});
+
+describe("output:root", () => {
+  it("adds a root element if enabled", () => {
+    const input: ItemWithHierarchy[] = [
+      { name: "src", level: 0, indent: 0, hasChildren: true },
+      { name: "one", level: 1, indent: 0, hasChildren: true },
+      { name: "file.txt", level: 2, indent: 0, hasChildren: false },
+      { name: ".gitignore", level: 0, indent: 0, hasChildren: false },
+    ];
+    const output = convertItemsToText(input, { rootElement: true });
+    const expected = dedent(`
+      .
+      ├── src/
+      │   └── one/
+      │       └── file.txt
+      └── .gitignore
     `);
 
     expect(output).toBe(expected);

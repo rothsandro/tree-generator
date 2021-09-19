@@ -2,14 +2,20 @@ import { parseInput } from "./core/parser";
 import { convertItemsToText } from "./core/output";
 import Alpine from "alpinejs";
 import "./styles/index.scss";
+import { TreeConfig } from "./types/config.types";
+
+const getDefaultTreeConfig = (): TreeConfig => ({
+  rootElement: true,
+});
 
 Alpine.data("tree", () => ({
   input: "src/\nfile.txt",
+  treeConfig: getDefaultTreeConfig(),
   get items() {
     return parseInput(this.input);
   },
   get formattedOutput() {
-    return convertItemsToText(this.items);
+    return convertItemsToText(this.items, this.treeConfig);
   },
 }));
 
