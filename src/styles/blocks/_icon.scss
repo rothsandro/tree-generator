@@ -1,0 +1,21 @@
+.icon-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: inherit;
+  background-color: inherit;
+}
+
+.icon-success {
+  width: 0.6rem;
+  height: 1rem;
+  border: 0 solid var(--tg-primary9);
+  border-width: 0 3px 3px 0;
+  transform: translateY(-2px) rotate(45deg);
+  transform-origin: center center;
+}

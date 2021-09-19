@@ -13,4 +13,26 @@ Alpine.data("tree", () => ({
   },
 }));
 
+Alpine.data("clipboard", () => ({
+  _timer: 0,
+  copied: false,
+  copy(content: string) {
+    clearTimeout(this._timer);
+    window.navigator.clipboard
+      .writeText(content)
+      .then(
+        () =>
+          new Promise<void>((resolve) => {
+            this.copied = true;
+            this._timer = setTimeout(() => {
+              this.copied = false;
+              resolve();
+            }, 800);
+          })
+      )
+      .then(() => (this.copied = false))
+      .catch(() => alert("Sorry, something went wrong"));
+  },
+}));
+
 Alpine.start();

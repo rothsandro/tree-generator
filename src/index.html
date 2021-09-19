@@ -11,7 +11,7 @@
       <header class="app__header app-header">
         <h1 class="app-header__title">Tree Generator</h1>
       </header>
-      <main class="app__main">
+      <main class="app__main" x-data="clipboard">
         <div class="tree-container">
           <div class="tree-input">
             <textarea
@@ -30,7 +30,14 @@
           </div>
         </div>
         <div class="tree-actions">
-          <button class="btn btn--primary" @click="alert('copy')">Copy</button>
+          <button class="btn btn--primary" @click="copy(formattedOutput)">
+            <span>Copy</span>
+            <template x-if="copied">
+              <span class="icon-overlay">
+                <span class="icon-success"></span>
+              </span>
+            </template>
+          </button>
         </div>
       </main>
     </div>
