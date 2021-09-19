@@ -1,4 +1,4 @@
-import { Item, ItemWithHierarchy } from "../types/item.types";
+import { ItemWithHierarchy } from "../types/item.types";
 import { convertItemsToText } from "./output";
 import dedent from "dedent";
 
@@ -21,8 +21,8 @@ describe("output", () => {
     const output = convertItemsToText(input);
     const expected = dedent(`
       src/
-      ├──file1.txt
-      └──file2.txt
+      ├── file1.txt
+      └── file2.txt
     `);
     expect(output).toBe(expected);
   });
@@ -35,7 +35,7 @@ describe("output", () => {
     const output = convertItemsToText(input);
     const expected = dedent(`
       src/
-      └──file.txt
+      └── file.txt
     `);
     expect(output).toBe(expected);
   });
@@ -49,8 +49,8 @@ describe("output", () => {
     const output = convertItemsToText(input);
     const expected = dedent(`
       src/
-      └──one/
-         └──file.txt
+      └── one/
+          └── file.txt
     `);
 
     expect(output).toBe(expected);
@@ -70,13 +70,13 @@ describe("output", () => {
     const output = convertItemsToText(input);
     const expected = dedent(`
       src/
-      ├──one/
-      │  └──file1.txt
-      ├──two/
-      │  ├──file2.txt
-      │  └──file3.txt
-      └──three/
-         └──file4.txt
+      ├── one/
+      │   └── file1.txt
+      ├── two/
+      │   ├── file2.txt
+      │   └── file3.txt
+      └── three/
+          └── file4.txt
     `);
 
     expect(output).toBe(expected);
@@ -97,14 +97,14 @@ describe("output", () => {
     const output = convertItemsToText(input);
     const expected = dedent(`
       src/
-      ├──one/
-      │  ├──one-a/
-      │  │  ├──file1.txt
-      │  │  └──file2.txt
-      │  └──one-b/
-      │     └──file3.txt
-      └──two/
-         └──file4.txt
+      ├── one/
+      │   ├── one-a/
+      │   │   ├── file1.txt
+      │   │   └── file2.txt
+      │   └── one-b/
+      │       └── file3.txt
+      └── two/
+          └── file4.txt
     `);
 
     expect(output).toBe(expected);
@@ -122,11 +122,11 @@ describe("output", () => {
     const output = convertItemsToText(input);
     const expected = dedent(`
       src/
-      └──one/
-         └──two
+      └── one/
+          └── two
       public/
-      └──assets/
-         └──img.png
+      └── assets/
+          └── img.png
     `);
 
     expect(output).toBe(expected);

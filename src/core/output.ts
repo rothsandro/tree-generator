@@ -3,10 +3,10 @@ import { Ascii, ItemWithAscii, ItemWithHierarchy } from "../types/item.types";
 const NEW_LINE_SEPARATOR = "\n";
 const FOLDER_SUFFIX = "/";
 const ASCII_MAPPING: Record<Ascii, string> = {
-  [Ascii.CHILD]: "├──",
-  [Ascii.LAST_CHILD]: "└──",
-  [Ascii.INDENT]: "   ",
-  [Ascii.PATH]: "│  ",
+  [Ascii.CHILD]: "├── ",
+  [Ascii.LAST_CHILD]: "└── ",
+  [Ascii.INDENT]: "    ",
+  [Ascii.PATH]: "│   ",
 };
 
 export function convertItemsToText(items: ItemWithHierarchy[]): string {
