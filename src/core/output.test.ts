@@ -155,3 +155,31 @@ describe("output:root", () => {
     expect(output).toBe(expected);
   });
 });
+
+describe("output:comments", () => {
+  it("adds comments at the end of the line", () => {
+    const input: ItemWithHierarchy[] = [
+      {
+        name: "src",
+        level: 0,
+        indent: 0,
+        hasChildren: true,
+        comment: "a folder",
+      },
+      {
+        name: "file.txt",
+        level: 1,
+        indent: 0,
+        hasChildren: false,
+        comment: "a file",
+      },
+    ];
+    const output = convertItemsToText(input);
+    const expected = dedent(`
+      src/  # a folder
+      └── file.txt  # a file
+    `);
+
+    expect(output).toBe(expected);
+  });
+});

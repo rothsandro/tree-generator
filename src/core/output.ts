@@ -18,6 +18,7 @@ export function convertItemsToText(
   const finalItems = pipe(
     items,
     addSuffix,
+    addComment,
     config.rootElement ? addRootElement : noop,
     addAsciiCodes,
     addAsciiStringsToName
@@ -55,6 +56,13 @@ function addSuffix(items: ItemWithHierarchy[]): ItemWithHierarchy[] {
     if (!item.hasChildren) return item;
     if (item.name.endsWith(FOLDER_SUFFIX)) return item;
     return { ...item, name: `${item.name}${FOLDER_SUFFIX}` };
+  });
+}
+
+function addComment(items: ItemWithHierarchy[]): ItemWithHierarchy[] {
+  return items.map((item) => {
+    if (!item.comment) return item;
+    return { ...item, name: `${item.name}  # ${item.comment}` };
   });
 }
 
