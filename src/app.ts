@@ -1,11 +1,18 @@
 import { parseInput } from "./core/parser";
 import { convertItemsToText } from "./core/output";
+import { TreeConfig } from "./types/config.types";
+import { pipe } from "./utils/pipe";
 import Alpine from "alpinejs";
 import "./styles/index.scss";
-import { TreeConfig } from "./types/config.types";
 
 const getDefaultTreeConfig = (): TreeConfig => ({
   rootElement: true,
+});
+
+Alpine.magic("persistTree", () => (input: string, config: TreeConfig) => {
+  const store = { input, config };
+  const data = pipe(store, JSON.stringify, btoa, encodeURIComponent);
+  history.replaceState(undefined, undefined, `#${data}`);
 });
 
 Alpine.data("tree", () => ({
@@ -16,6 +23,11 @@ Alpine.data("tree", () => ({
   },
   get formattedOutput() {
     return convertItemsToText(this.items, this.treeConfig);
+  },
+  init() {
+    Alpine.effect(() => {
+      this.$persistTree(this.input, this.treeConfig);
+    });
   },
 }));
 
