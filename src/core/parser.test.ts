@@ -91,6 +91,38 @@ describe("parser basics", () => {
   });
 });
 
+describe("parser comments", () => {
+  it("has comment as undefined by default", () => {
+    const input = "file.txt";
+    const output = parseInput(input);
+
+    expect(output).toHaveLength(1);
+    expect(output[0]).toMatchObject({ name: "file.txt", comment: undefined });
+  });
+
+  it("parses a comment", () => {
+    const input = "file.txt # this is a comment";
+    const output = parseInput(input);
+
+    expect(output).toHaveLength(1);
+    expect(output[0]).toMatchObject({
+      name: "file.txt",
+      comment: "this is a comment",
+    });
+  });
+
+  it("parses a comment that contains #", () => {
+    const input = "file.txt # one # two ## three ###";
+    const output = parseInput(input);
+
+    expect(output).toHaveLength(1);
+    expect(output[0]).toMatchObject({
+      name: "file.txt",
+      comment: "one # two ## three ###",
+    });
+  });
+});
+
 describe("parser tree", () => {
   it("ignores indents on root level", () => {
     const input = "   src";

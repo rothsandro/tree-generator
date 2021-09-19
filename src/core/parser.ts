@@ -1,6 +1,7 @@
 import { Item, ItemWithHierarchy } from "../types/item.types";
 
 const NEW_LINE_SEPARATOR_REGEX = /\r?\n/;
+const COMMENT_START = " #";
 
 export function parseInput(input: string): ItemWithHierarchy[] {
   const items = input
@@ -36,8 +37,19 @@ function calculateLevel(items: Item[]): ItemWithHierarchy[] {
 }
 
 function parseLine(line: string): Item {
-  const name = line.trim();
+  const content = line.trim();
+  let name = content.trim();
+  let comment = undefined;
+
+  if (name.includes(COMMENT_START)) {
+    name = content.substring(0, content.indexOf(COMMENT_START)).trim();
+    comment = content
+      .substring(content.indexOf(COMMENT_START) + COMMENT_START.length)
+      .trim();
+  }
+
   const indent = line.length - line.trimStart().length;
-  const item: Item = { name, indent };
+  const item: Item = { name: name.trim(), indent, comment };
+
   return item;
 }

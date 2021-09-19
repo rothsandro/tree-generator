@@ -1,6 +1,7 @@
 export interface Item {
   name: string;
   indent: number;
+  comment?: string;
 }
 
 export interface ItemWithHierarchy extends Item {
