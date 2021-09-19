@@ -9,13 +9,19 @@
   left: 0;
   border-radius: inherit;
   background-color: inherit;
+
+  span + span {
+    display: block;
+    margin-left: var(--tg-spacing-2);
+    color: var(--tg-primary9);
+  }
 }
 
 .icon-success {
-  width: 0.6rem;
-  height: 1rem;
+  width: 0.5rem;
+  height: 0.9rem;
   border: 0 solid var(--tg-primary9);
   border-width: 0 3px 3px 0;
-  transform: translateY(-2px) rotate(45deg);
+  transform: translateY(-1px) rotate(45deg);
   transform-origin: center center;
 }

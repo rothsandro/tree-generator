@@ -9,17 +9,14 @@ const getDefaultTreeConfig = (): TreeConfig => ({
   rootElement: true,
 });
 
-Alpine.magic(
-  "persistTree",
-  () =>
-    (input: string, config: TreeConfig, initial = false) => {
-      const store = { input, config };
-      const data = pipe(store, JSON.stringify, btoa, encodeURIComponent);
-      if (!initial) history.replaceState(undefined, undefined, `#${data}`);
-    }
-);
+Alpine.magic("persistTree", () => (input: string, config: TreeConfig) => {
+  const store = { input, config };
+  const data = pipe(store, JSON.stringify, btoa, encodeURIComponent);
+  history.replaceState(undefined, undefined, `#${data}`);
+});
 
 Alpine.data("tree", () => ({
+  makeUrlShareable: false,
   input: "src/\nfile.txt",
   treeConfig: getDefaultTreeConfig(),
   get items() {
@@ -28,11 +25,12 @@ Alpine.data("tree", () => ({
   get formattedOutput() {
     return convertItemsToText(this.items, this.treeConfig);
   },
+  enableShareUrl() {
+    this.makeUrlShareable = true;
+  },
   init() {
-    let initial = true;
     Alpine.effect(() => {
-      this.$persistTree(this.input, this.treeConfig, initial);
-      initial = false;
+      this.makeUrlShareable && this.$persistTree(this.input, this.treeConfig);
     });
   },
 }));

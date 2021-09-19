@@ -1,4 +1,8 @@
 .tree-actions {
   display: flex;
   justify-content: flex-end;
+
+  & > * + * {
+    margin-left: var(--tg-spacing-4);
+  }
 }
