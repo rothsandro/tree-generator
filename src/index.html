@@ -31,6 +31,19 @@
               </button>
               <label for="tree-config-root-el">Root Element</label>
             </div>
+            <div class="switch">
+              <button
+                @click="treeConfig.alignComments = !treeConfig.alignComments"
+                type="button"
+                role="switch"
+                :aria-checked="treeConfig.alignComments"
+                :value="treeConfig.alignComments ? 'on' : 'off'"
+                id="tree-config-align-comments"
+              >
+                <span></span>
+              </button>
+              <label for="tree-config-align-comments">Align comments</label>
+            </div>
           </div>
           <div class="tree-container">
             <div class="tree-input">
