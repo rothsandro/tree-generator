@@ -12,6 +12,7 @@
   font-weight: 400;
   line-height: var(--tg-line-height-base);
   resize: none;
+  -webkit-appearance: none;
   white-space: pre;
 
   &:focus {
