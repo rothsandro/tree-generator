@@ -1,7 +1,7 @@
 import { Item, ItemWithHierarchy } from "../types/item.types";
 
 const NEW_LINE_SEPARATOR_REGEX = /\r?\n/;
-const COMMENT_START = " #";
+const COMMENT_START = " # ";
 
 export function parseInput(input: string): ItemWithHierarchy[] {
   const items = input

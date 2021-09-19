@@ -5,7 +5,7 @@ function buildInput(...lines: string[]): string {
   return lines.join("\n");
 }
 
-describe("parser basics", () => {
+describe("parser:basics", () => {
   it("parses a file", () => {
     const input = "file.txt";
     const output = parseInput(input);
@@ -91,13 +91,35 @@ describe("parser basics", () => {
   });
 });
 
-describe("parser comments", () => {
+describe("parser:comments", () => {
   it("has comment as undefined by default", () => {
     const input = "file.txt";
     const output = parseInput(input);
 
     expect(output).toHaveLength(1);
     expect(output[0]).toMatchObject({ name: "file.txt", comment: undefined });
+  });
+
+  it("parses a comment", () => {
+    const input = "file.txt # this is a comment";
+    const output = parseInput(input);
+
+    expect(output).toHaveLength(1);
+    expect(output[0]).toMatchObject({
+      name: "file.txt",
+      comment: "this is a comment",
+    });
+  });
+
+  it("ignores # as part of the name", () => {
+    const input = "file #123.txt";
+    const output = parseInput(input);
+
+    expect(output).toHaveLength(1);
+    expect(output[0]).toMatchObject({
+      name: "file #123.txt",
+      comment: undefined,
+    });
   });
 
   it("parses a comment", () => {
@@ -123,7 +145,7 @@ describe("parser comments", () => {
   });
 });
 
-describe("parser tree", () => {
+describe("parser:tree", () => {
   it("ignores indents on root level", () => {
     const input = "   src";
     const output = parseInput(input);
