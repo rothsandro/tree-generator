@@ -61,7 +61,7 @@ function addSuffix(items: ItemWithHierarchy[]): ItemWithHierarchy[] {
 
 function addComment(
   items: ItemWithHierarchy[],
-  align: boolean
+  align?: boolean
 ): ItemWithHierarchy[] {
   const maxLength = align
     ? Math.max(...items.map((item) => item.name.length))
