@@ -12,6 +12,21 @@
         <h1 class="app-header__title">Tree Generator</h1>
       </header>
       <main class="app__main" x-data="clipboard">
+        <div class="tree-config">
+          <div class="switch">
+            <button
+              @click="treeConfig.rootElement = !treeConfig.rootElement"
+              type="button"
+              role="switch"
+              :aria-checked="treeConfig.rootElement"
+              :value="treeConfig.rootElement ? 'on' : 'off'"
+              id="tree-config-root-el"
+            >
+              <span></span>
+            </button>
+            <label for="tree-config-root-el">Root Element</label>
+          </div>
+        </div>
         <div class="tree-container">
           <div class="tree-input">
             <textarea

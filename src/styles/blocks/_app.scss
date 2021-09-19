@@ -19,6 +19,6 @@
 .app__main {
   height: 100%;
   display: grid;
-  grid-template-rows: 1fr auto;
+  grid-template-rows: auto 1fr auto;
   gap: var(--tg-spacing-4);
 }

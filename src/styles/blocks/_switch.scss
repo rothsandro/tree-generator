@@ -1,0 +1,45 @@
+.switch {
+  display: inline-flex;
+  align-items: center;
+
+  button {
+    width: 42px;
+    height: 24px;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: var(--tg-rounded-full);
+    background-color: var(--tg-primary-bg-hover);
+
+    &:focus {
+      outline: 0.25rem solid transparent;
+      box-shadow: 0 0 0 3px var(--tg-primary-border);
+    }
+
+    span {
+      width: 20px;
+      height: 20px;
+      display: block;
+      box-shadow: rgb(0 0 0 / 14%) 0px 2px 2px;
+      border-radius: var(--tg-rounded-full);
+      background-color: #fff;
+      transition: transform 100ms ease 0s;
+      transform: translateX(2px);
+    }
+
+    &[aria-checked="true"] {
+      background-color: var(--tg-primary-bg-solid);
+
+      span {
+        transform: translateX(20px);
+      }
+    }
+  }
+
+  label {
+    display: block;
+    margin-left: var(--tg-spacing-3);
+    user-select: none;
+  }
+}
