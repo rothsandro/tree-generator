@@ -14,7 +14,7 @@ export function getDefaultInput(): string {
     "",
     "Use indentation to create",
     "nested folders and files.",
-    'You can use "#” at the end',
+    'You can use "#" at the end',
     "of a line to add a comment.",
     "",
     "Here is an example:",
