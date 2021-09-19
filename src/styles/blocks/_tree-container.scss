@@ -1,0 +1,14 @@
+@use "./../breakpoints" as bp;
+
+.tree-container {
+  --tree-container-spacing: var(--tg-spacing-4);
+
+  height: 100%;
+  display: grid;
+  gap: var(--tree-container-spacing);
+
+  @include bp.media-breakpoint-md-up {
+    grid-template-columns: repeat(2, 1fr);
+    --tree-container-spacing: var(--tg-spacing-6);
+  }
+}

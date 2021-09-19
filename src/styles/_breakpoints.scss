@@ -1,0 +1,35 @@
+$bp-sm: 640px;
+$bp-md: 768px;
+$bp-lg: 1024px;
+$bp-xl: 1280px;
+$bp-2xl: 1536px;
+
+@mixin media-breakpoint-sm-up {
+  @media (min-width: $bp-sm) {
+    @content;
+  }
+}
+
+@mixin media-breakpoint-md-up {
+  @media (min-width: $bp-md) {
+    @content;
+  }
+}
+
+@mixin media-breakpoint-lg-up {
+  @media (min-width: $bp-lg) {
+    @content;
+  }
+}
+
+@mixin media-breakpoint-xl-up {
+  @media (min-width: $bp-xl) {
+    @content;
+  }
+}
+
+@mixin media-breakpoint-2xl-up {
+  @media (min-width: $bp-2xl) {
+    @content;
+  }
+}

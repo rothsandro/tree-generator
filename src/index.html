@@ -5,16 +5,31 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>tree generator</title>
-    <link href="./styles/index.scss" rel="stylesheet" />
   </head>
   <body>
-    <div x-data="tree">
-      <textarea x-model="input" rows="10"></textarea>
-      <textarea
-        x-bind:value="formattedOutput"
-        rows="10"
-        style="font-family: Consolas, 'Courier New', Courier, monospace"
-      ></textarea>
+    <div x-data="tree" class="app">
+      <header class="app__header app-header">
+        <h1 class="app-header__title">Tree Explorer</h1>
+      </header>
+      <main class="app__main">
+        <div class="tree-container">
+          <div class="tree-input">
+            <textarea
+              aria-label="Input"
+              class="tree-input__input"
+              x-model="input"
+            ></textarea>
+          </div>
+          <div class="tree-output">
+            <textarea
+              aria-label="Output"
+              class="tree-output__output"
+              x-bind:value="formattedOutput"
+              readonly
+            ></textarea>
+          </div>
+        </div>
+      </main>
     </div>
     <script src="app.ts" type="module"></script>
   </body>

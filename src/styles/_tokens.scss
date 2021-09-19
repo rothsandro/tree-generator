@@ -1,5 +1,8 @@
 @use "sass:math";
 
+@import "~node_modules/@radix-ui/colors/indigo.css";
+@import "~node_modules/@radix-ui/colors/slate.css";
+
 @function from-px($px) {
   @return (math.div($px, 16)) + "rem";
 }
@@ -14,18 +17,14 @@
   --tg-spacing-6: #{from-px(32)};
   --tg-spacing-7: #{from-px(48)};
 
-  --indigo1: hsl(225 60% 99.4%);
-  --indigo2: hsl(223 100% 98.6%);
-  --indigo3: hsl(223 98.4% 97.1%);
-  --indigo4: hsl(223 92.9% 95%);
-  --indigo5: hsl(224 87.1% 92%);
-  --indigo6: hsl(224 81.9% 87.8%);
-  --indigo7: hsl(225 77.4% 82.1%);
-  --indigo8: hsl(226 75.4% 74.5%);
-  --indigo9: hsl(226 70% 55.5%);
-  --indigo10: hsl(226 58.6% 51.3%);
-  --indigo11: hsl(226 55% 45%);
-  --indigo12: hsl(226 62% 17%);
+  --tg-rounded-sm: 0.125rem;
+  --tg-rounded: 0.25rem;
+  --tg-rounded-md: 0.375rem;
+  --tg-rounded-lg: 0.5rem;
+  --tg-rounded-xl: 0.75rem;
+  --tg-rounded-2xl: 1rem;
+  --tg-rounded-3xl: 1.5rem;
+  --tg-rounded-full: 9999px;
 
   --tg-primary1: var(--indigo1);
   --tg-primary2: var(--indigo2);
@@ -53,19 +52,6 @@
   --tg-primary-text-low: var(--tg-primary11);
   --tg-primary-text-high: var(--tg-primary12);
 
-  --slate1: hsl(206 30% 98.8%);
-  --slate2: hsl(210 16.7% 97.6%);
-  --slate3: hsl(209 13.3% 95.3%);
-  --slate4: hsl(209 12.2% 93.2%);
-  --slate5: hsl(208 11.7% 91.1%);
-  --slate6: hsl(208 11.3% 88.9%);
-  --slate7: hsl(207 11.1% 85.9%);
-  --slate8: hsl(205 10.7% 78%);
-  --slate9: hsl(206 6% 56.1%);
-  --slate10: hsl(206 5.8% 52.3%);
-  --slate11: hsl(206 6% 43.5%);
-  --slate12: hsl(206 24% 9%);
-
   --tg-neutral1: var(--slate1);
   --tg-neutral2: var(--slate2);
   --tg-neutral3: var(--slate3);
@@ -91,4 +77,27 @@
   --tg-neutral-bg-solid-hover: var(--tg-neutral10);
   --tg-neutral-text-low: var(--tg-neutral11);
   --tg-neutral-text-high: var(--tg-neutral12);
+
+  --tg-font-size-xs: 0.75rem;
+  --tg-font-size-sm: 0.875rem;
+  --tg-font-size-base: 1rem;
+  --tg-font-size-lg: 1.125rem;
+  --tg-font-size-xl: 1.25rem;
+  --tg-font-size-2xl: 1.5rem;
+  --tg-font-size-3xl: 1.875rem;
+  --tg-font-size-4xl: 2.25rem;
+  --tg-font-size-5xl: 3rem;
+
+  --tg-line-height-xs: #{math.div(1, 0.75)};
+  --tg-line-height-sm: #{math.div(1.25, 1.25)};
+  --tg-line-height-base: #{math.div(1.5, 1)};
+  --tg-line-height-lg: #{math.div(1.75, 1.75)};
+  --tg-line-height-xl: #{math.div(1.75, 1.25)};
+  --tg-line-height-2xl: #{math.div(2, 1.5)};
+  --tg-line-height-3xl: #{math.div(2.25, 1.875)};
+  --tg-line-height-4xl: #{math.div(2.5, 2.25)};
+  --tg-line-height-5xl: #{math.div(1, 3)};
+
+  --tg-font-family-default: Inter, sans-serif;
+  --tg-font-family-mono: "Fira Mono", monospace;
 }
