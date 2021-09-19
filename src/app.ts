@@ -9,11 +9,15 @@ const getDefaultTreeConfig = (): TreeConfig => ({
   rootElement: true,
 });
 
-Alpine.magic("persistTree", () => (input: string, config: TreeConfig) => {
-  const store = { input, config };
-  const data = pipe(store, JSON.stringify, btoa, encodeURIComponent);
-  history.replaceState(undefined, undefined, `#${data}`);
-});
+Alpine.magic(
+  "persistTree",
+  () =>
+    (input: string, config: TreeConfig, initial = false) => {
+      const store = { input, config };
+      const data = pipe(store, JSON.stringify, btoa, encodeURIComponent);
+      if (!initial) history.replaceState(undefined, undefined, `#${data}`);
+    }
+);
 
 Alpine.data("tree", () => ({
   input: "src/\nfile.txt",
@@ -25,8 +29,10 @@ Alpine.data("tree", () => ({
     return convertItemsToText(this.items, this.treeConfig);
   },
   init() {
+    let initial = true;
     Alpine.effect(() => {
-      this.$persistTree(this.input, this.treeConfig);
+      this.$persistTree(this.input, this.treeConfig, initial);
+      initial = false;
     });
   },
 }));
