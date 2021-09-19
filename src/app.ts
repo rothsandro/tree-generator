@@ -95,4 +95,20 @@ Alpine.data("clipboard", () => ({
   },
 }));
 
+Alpine.magic("allowTabs", () => {
+  const spaces = "  ";
+  return {
+    ["@keydown.tab"](event: KeyboardEvent) {
+      const input = event.target as HTMLTextAreaElement;
+      const value = input.value;
+      const start = input.selectionStart;
+      const end = input.selectionEnd;
+      input.value = value.substring(0, start) + spaces + value.substring(end);
+      input.selectionEnd = start + spaces.length;
+      input.selectionStart = input.selectionEnd;
+      event.preventDefault();
+    },
+  };
+});
+
 Alpine.start();
