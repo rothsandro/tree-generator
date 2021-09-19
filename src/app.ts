@@ -31,7 +31,7 @@ Alpine.data("treeUrlStore", function () {
     writeToStore(input: string, treeConfig: TreeConfig) {
       const store = { input, treeConfig };
       const data = pipe(store, JSON.stringify, btoa, encodeURIComponent);
-      history.replaceState(undefined, undefined, `#${data}`);
+      window.history.replaceState(undefined, "", `#${data}`);
     },
     init() {
       this.autoUpdateStore = !!this.readFromStore();
@@ -64,14 +64,14 @@ Alpine.data("clipboard", () => ({
   _timer: 0,
   copied: false,
   copy(content: string) {
-    clearTimeout(this._timer);
+    window.clearTimeout(this._timer);
     window.navigator.clipboard
       .writeText(content)
       .then(
         () =>
           new Promise<void>((resolve) => {
             this.copied = true;
-            this._timer = setTimeout(() => {
+            this._timer = window.setTimeout(() => {
               this.copied = false;
               resolve();
             }, 800);
