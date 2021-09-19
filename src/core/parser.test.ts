@@ -5,7 +5,7 @@ function buildInput(...lines: string[]): string {
   return lines.join("\n");
 }
 
-describe("parser", () => {
+describe("parser basics", () => {
   it("parses a file", () => {
     const input = "file.txt";
     const output = parseInput(input);
@@ -89,7 +89,9 @@ describe("parser", () => {
 
     expect(output).toHaveLength(0);
   });
+});
 
+describe("parser tree", () => {
   it("ignores indents on root level", () => {
     const input = "   src";
     const output = parseInput(input);
