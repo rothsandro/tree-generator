@@ -7,73 +7,79 @@
     <title>Tree Generator</title>
   </head>
   <body>
-    <div x-data="tree" class="app">
-      <header class="app__header app-header">
-        <h1 class="app-header__title">Tree Generator</h1>
-      </header>
-      <main class="app__main">
-        <div class="tree-config">
-          <div class="switch">
+    <div x-data="treeUrlStore">
+      <div
+        x-data="tree(readFromStore())"
+        x-effect="autoUpdateStore && writeToStore(input, treeConfig)"
+        class="app"
+      >
+        <header class="app__header app-header">
+          <h1 class="app-header__title">Tree Generator</h1>
+        </header>
+        <main class="app__main">
+          <div class="tree-config">
+            <div class="switch">
+              <button
+                @click="treeConfig.rootElement = !treeConfig.rootElement"
+                type="button"
+                role="switch"
+                :aria-checked="treeConfig.rootElement"
+                :value="treeConfig.rootElement ? 'on' : 'off'"
+                id="tree-config-root-el"
+              >
+                <span></span>
+              </button>
+              <label for="tree-config-root-el">Root Element</label>
+            </div>
+          </div>
+          <div class="tree-container">
+            <div class="tree-input">
+              <textarea
+                aria-label="Input"
+                class="tree-input__input"
+                x-model="input"
+              ></textarea>
+            </div>
+            <div class="tree-output">
+              <textarea
+                aria-label="Output"
+                class="tree-output__output"
+                x-bind:value="formattedOutput"
+                readonly
+              ></textarea>
+            </div>
+          </div>
+          <div class="tree-actions">
             <button
-              @click="treeConfig.rootElement = !treeConfig.rootElement"
-              type="button"
-              role="switch"
-              :aria-checked="treeConfig.rootElement"
-              :value="treeConfig.rootElement ? 'on' : 'off'"
-              id="tree-config-root-el"
+              x-data="clipboard"
+              class="btn btn--primary"
+              @click="copy(formattedOutput)"
+              :disabled="formattedOutput.length === 0"
             >
-              <span></span>
+              <span>Copy</span>
+              <template x-if="copied">
+                <span class="icon-overlay">
+                  <span class="icon-success"></span>
+                  <span>Copied!</span>
+                </span>
+              </template>
             </button>
-            <label for="tree-config-root-el">Root Element</label>
+            <button
+              x-data="clipboard"
+              class="btn btn--primary"
+              @click="enableAutoUpdate(); $nextTick(() => copy(getShareUrl()))"
+            >
+              <span>Share URL</span>
+              <template x-if="copied">
+                <span class="icon-overlay">
+                  <span class="icon-success"></span>
+                  <span>URL copied</span>
+                </span>
+              </template>
+            </button>
           </div>
-        </div>
-        <div class="tree-container">
-          <div class="tree-input">
-            <textarea
-              aria-label="Input"
-              class="tree-input__input"
-              x-model="input"
-            ></textarea>
-          </div>
-          <div class="tree-output">
-            <textarea
-              aria-label="Output"
-              class="tree-output__output"
-              x-bind:value="formattedOutput"
-              readonly
-            ></textarea>
-          </div>
-        </div>
-        <div class="tree-actions">
-          <button
-            x-data="clipboard"
-            class="btn btn--primary"
-            @click="copy(formattedOutput)"
-            :disabled="formattedOutput.length === 0"
-          >
-            <span>Copy</span>
-            <template x-if="copied">
-              <span class="icon-overlay">
-                <span class="icon-success"></span>
-                <span>Copied!</span>
-              </span>
-            </template>
-          </button>
-          <button
-            x-data="clipboard"
-            class="btn btn--primary"
-            @click="enableShareUrl(); $nextTick(() => copy(window.location.href))"
-          >
-            <span>Share URL</span>
-            <template x-if="copied">
-              <span class="icon-overlay">
-                <span class="icon-success"></span>
-                <span>URL copied</span>
-              </span>
-            </template>
-          </button>
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
     <script src="app.ts" type="module"></script>
   </body>
