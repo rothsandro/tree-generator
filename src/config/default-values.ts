@@ -9,15 +9,15 @@ export function getDefaultTreeConfig(): TreeConfig {
 
 export function getDefaultInput(): string {
   return [
-    "Generate a nice folder tree",
-    "by editing this example.",
+    "# Generate a nice folder tree",
+    "# by editing this example.",
     "",
-    "Use indentation to create",
-    "nested folders and files.",
-    'You can use "#" at the end',
-    "of a line to add a comment.",
+    "# Use indentation to create",
+    "# nested folders and files.",
+    '# You can use "#" at the end',
+    "# of a line to add a comment.",
     "",
-    "Here is an example:",
+    "# Here is an example:",
     "",
     "src",
     "  assets # Images, fonts and more",

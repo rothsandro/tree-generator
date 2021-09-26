@@ -92,6 +92,15 @@ describe("parser:basics", () => {
 });
 
 describe("parser:comments", () => {
+  it("ignores comment lines", () => {
+    const input =
+      "# this is comment line  #  this is a comment line\n file.txt";
+    const output = parseInput(input);
+
+    expect(output).toHaveLength(1);
+    expect(output[0]).toMatchObject({ name: "file.txt", comment: undefined });
+  });
+
   it("has comment as undefined by default", () => {
     const input = "file.txt";
     const output = parseInput(input);
