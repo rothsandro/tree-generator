@@ -1,6 +1,6 @@
 # ASCII Tree Generator
 
-A simple web-based tree generator that let's you create ASCII folder trees.
+A simple web-based tree generator that lets you create ASCII folder trees.
 
 The app is available on https://tree.microkit.co/
 
