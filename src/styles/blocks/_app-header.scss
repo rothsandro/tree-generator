@@ -1,6 +1,31 @@
+@use "./../breakpoints" as bp;
+
+.app-header {
+  display: grid;
+  gap: var(--tg-spacing-3);
+  align-items: center;
+  justify-items: start;
+  grid-template-columns: 1fr auto;
+
+  @include bp.media-breakpoint-md-up() {
+    align-items: start;
+  }
+}
+
 .app-header__title {
   margin: 0;
-  font-size: var(--tg-font-size-4xl);
-  line-height: var(--tg-line-height-4xl);
+  font-size: var(--tg-font-size-2xl);
+  line-height: var(--tg-line-height-2xl);
   font-variation-settings: "wght" 700;
+
+  @include bp.media-breakpoint-md-up() {
+    font-size: var(--tg-font-size-4xl);
+    line-height: var(--tg-line-height-4xl);
+  }
+}
+
+.app-header__link {
+  color: var(--tg-primary-text-low);
+  font-size: var(--tg-font-size-sm);
+  text-decoration: none;
 }
