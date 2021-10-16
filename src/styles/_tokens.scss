@@ -1,7 +1,7 @@
 @use "sass:math";
 
-@import "~node_modules/@radix-ui/colors/indigo.css";
-@import "~node_modules/@radix-ui/colors/slate.css";
+@import "npm:@radix-ui/colors/indigo.css";
+@import "npm:@radix-ui/colors/slate.css";
 
 @function from-px($px) {
   @return (math.div($px, 16)) + "rem";

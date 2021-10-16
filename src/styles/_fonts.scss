@@ -1,4 +1,2 @@
-// "npm:" scheme is currently broken in parcel rc.0
-// see https://github.com/parcel-bundler/parcel/issues/6886#issuecomment-917391983
-@import "~node_modules/@fontsource/inter/variable.css";
-@import "~node_modules/@fontsource/fira-mono/400.css";
+@import "npm:@fontsource/inter/variable.css";
+@import "npm:@fontsource/fira-mono/400.css";
