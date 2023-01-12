@@ -14,5 +14,6 @@ export class TextArea {
     const selection = editor.selection;
     this.input.value = editor.toString();
     this.input.setSelectionRange(selection.start, selection.end);
+    this.input.dispatchEvent(new InputEvent("input"));
   }
 }
