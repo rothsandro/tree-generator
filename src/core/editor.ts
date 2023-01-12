@@ -15,8 +15,7 @@ export class Editor {
     const textLines = value.match(/^.*(?:\r?\n|$)/gm);
     this.lines = textLines.map((line, index, list) => {
       const startPos = list.slice(0, index).join("").length;
-      const relativeSelection = selection.moveBy(-startPos);
-      return new Line(line, getLineSelection(line, relativeSelection));
+      return Line.fromRelativeSelection(line, selection.moveBy(-startPos));
     });
   }
 
@@ -40,7 +39,17 @@ export class Editor {
 }
 
 export class Line {
-  constructor(private value: string, private _selection: Selection) {}
+  constructor(
+    private value: string,
+    private _selection: Selection,
+    private lineBreak = ""
+  ) {}
+
+  static fromRelativeSelection(text: string, relativeSelection: Selection) {
+    const { content, lineBreak } = extractLineBreak(text);
+    const lineSelection = getLineSelection(content, relativeSelection);
+    return new Line(content, lineSelection, lineBreak);
+  }
 
   get selection() {
     return this._selection;
@@ -56,12 +65,11 @@ export class Line {
 
   indent() {
     const indent = "  ";
-    const newValue = indent + this.value;
-    this.value = newValue;
-    this._selection = new Selection(
-      this.selection.start > 0 ? this.selection.start + indent.length : 0,
-      this.selection.end >= 0 ? this.selection.end + indent.length : -1
-    );
+    this.value = indent + this.value;
+
+    if (this.selection.isValid) {
+      this._selection = this.selection.moveBy(indent.length);
+    }
   }
 
   outdent() {
@@ -77,18 +85,17 @@ export class Line {
     }
   }
 
-  insertText(text: string) {
+  insertTextBeforeSelection(text: string) {
+    if (!this.selection.isValid) throw new Error("Line has no selection");
+
     const before = this.value.substring(0, this.selection.start);
     const after = this.value.substring(this.selection.end);
     this.value = before + text + after;
-
-    if (this.selection.isValid) {
-      this._selection = this.selection.moveBy(text.length);
-    }
+    this._selection = this.selection.moveBy(text.length);
   }
 
   toString() {
-    return this.value;
+    return `${this.value}${this.lineBreak}`;
   }
 }
 
@@ -112,12 +119,16 @@ export class Selection extends Range {
 
 function getLineSelection(line: string, selection: Selection) {
   const isSelectionBefore = selection.end < 0;
-  const isSelectionAfter = selection.start >= line.length;
-
+  const isSelectionAfter = selection.start > line.length;
   if (isSelectionBefore || isSelectionAfter) return new Selection();
 
   const start = Math.max(0, selection.start);
   const end = Math.min(selection.end, line.length);
 
   return new Selection(start, end);
+}
+
+function extractLineBreak(text: string) {
+  const [content, lineBreak = ""] = text.split(/(\r?\n)$/);
+  return { content, lineBreak };
 }

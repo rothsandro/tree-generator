@@ -113,7 +113,9 @@ Alpine.magic("allowTabs", () => {
       const textArea = new TextArea(event.target as HTMLTextAreaElement);
       const editor = textArea.createEditor();
       editor.selectedLines.forEach((line) =>
-        line.hasTextSelected ? line.indent() : line.insertText(spaces)
+        line.hasTextSelected
+          ? line.indent()
+          : line.insertTextBeforeSelection(spaces)
       );
       textArea.applyEditor(editor);
     },
