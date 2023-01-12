@@ -5,6 +5,7 @@ import { pipe } from "./utils/pipe";
 import { getDefaultInput, getDefaultTreeConfig } from "./config/default-values";
 import { TreeStore } from "./types/store.types";
 import { TextArea } from "./core/textarea";
+import { Line } from "./core/editor";
 import Alpine from "alpinejs";
 import "./styles/index.scss";
 
@@ -100,6 +101,23 @@ Alpine.magic("allowTabs", () => {
   const spaces = "  ";
 
   return {
+    ["@keydown.enter"](event: KeyboardEvent) {
+      const textArea = new TextArea(event.target as HTMLTextAreaElement);
+      const editor = textArea.createEditor();
+      const [selectedLine, ...moreLines] = editor.selectedLines;
+
+      if (moreLines.length || !selectedLine.isCursorAtEnd) return;
+
+      event.preventDefault();
+
+      const newLine = Line.fromText(selectedLine.getIndentation());
+      editor.insertLineAfter(newLine, selectedLine);
+
+      editor.removeSelection();
+      newLine.setSelectionToEnd();
+
+      textArea.applyEditor(editor);
+    },
     ["@keydown.shift.tab"](event: KeyboardEvent) {
       event.preventDefault();
       event.stopImmediatePropagation();

@@ -11,12 +11,26 @@ export class Editor {
     return new Selection(this.getSelectionStart(), this.getSelectionEnd());
   }
 
+  get hasTextSelected() {
+    return this.lines.some((line) => line.hasTextSelected);
+  }
+
   constructor(value: string, selection: Selection) {
     const textLines = value.match(/^.*(?:\r?\n|$)/gm);
     this.lines = textLines.map((line, index, list) => {
       const startPos = list.slice(0, index).join("").length;
       return Line.fromRelativeSelection(line, selection.moveBy(-startPos));
     });
+  }
+
+  insertLineAfter(newLine: Line, after: Line) {
+    const lineIdx = this.lines.indexOf(after);
+    this.lines.splice(lineIdx + 1, 0, newLine);
+    after.ensureLineBreak();
+  }
+
+  removeSelection() {
+    this.lines.forEach((line) => line.removeSelection());
   }
 
   private getSelectionStart() {
@@ -51,6 +65,10 @@ export class Line {
     return new Line(content, lineSelection, lineBreak);
   }
 
+  static fromText(text: string) {
+    return new Line(text, new Selection(text.length, text.length), "\n");
+  }
+
   get selection() {
     return this._selection;
   }
@@ -61,6 +79,13 @@ export class Line {
 
   get hasTextSelected() {
     return this.selection.length > 0;
+  }
+
+  get isCursorAtEnd() {
+    return (
+      this.selection.start === this.value.length &&
+      this.selection.end === this.value.length
+    );
   }
 
   indent() {
@@ -92,6 +117,23 @@ export class Line {
     const after = this.value.substring(this.selection.end);
     this.value = before + text + after;
     this._selection = this.selection.moveBy(text.length);
+  }
+
+  getIndentation() {
+    const match = this.value.match(/^( *)/);
+    return match ? match[0] : "";
+  }
+
+  removeSelection() {
+    this._selection = new Selection();
+  }
+
+  setSelectionToEnd() {
+    this._selection = new Selection(this.value.length, this.value.length);
+  }
+
+  ensureLineBreak() {
+    this.lineBreak ||= "\n";
   }
 
   toString() {
