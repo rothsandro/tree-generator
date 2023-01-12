@@ -4,6 +4,7 @@ import { TreeConfig } from "./types/config.types";
 import { pipe } from "./utils/pipe";
 import { getDefaultInput, getDefaultTreeConfig } from "./config/default-values";
 import { TreeStore } from "./types/store.types";
+import { TextArea } from "./core/textarea";
 import Alpine from "alpinejs";
 import "./styles/index.scss";
 
@@ -97,16 +98,24 @@ Alpine.data("clipboard", () => ({
 
 Alpine.magic("allowTabs", () => {
   const spaces = "  ";
+
   return {
-    ["@keydown.tab"](event: KeyboardEvent) {
-      const input = event.target as HTMLTextAreaElement;
-      const value = input.value;
-      const start = input.selectionStart;
-      const end = input.selectionEnd;
-      input.value = value.substring(0, start) + spaces + value.substring(end);
-      input.selectionEnd = start + spaces.length;
-      input.selectionStart = input.selectionEnd;
+    ["@keydown.shift.tab"](event: KeyboardEvent) {
       event.preventDefault();
+      event.stopImmediatePropagation();
+      const textArea = new TextArea(event.target as HTMLTextAreaElement);
+      const editor = textArea.createEditor();
+      editor.selectedLines.forEach((line) => line.outdent());
+      textArea.applyEditor(editor);
+    },
+    ["@keydown.tab"](event: KeyboardEvent) {
+      event.preventDefault();
+      const textArea = new TextArea(event.target as HTMLTextAreaElement);
+      const editor = textArea.createEditor();
+      editor.selectedLines.forEach((line) =>
+        line.hasTextSelected ? line.indent() : line.insertText(spaces)
+      );
+      textArea.applyEditor(editor);
     },
   };
 });
