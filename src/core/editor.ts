@@ -34,6 +34,22 @@ export class Editor {
     this.lines.forEach((line) => line.removeSelection());
   }
 
+  moveLineUp(line: Line) {
+    const lineIdx = this.lines.indexOf(line);
+    if (lineIdx === 0) return;
+
+    this.lines.splice(lineIdx, 1);
+    this.lines.splice(lineIdx - 1, 0, line);
+  }
+
+  moveLineDown(line: Line) {
+    const lineIdx = this.lines.indexOf(line);
+    if (lineIdx === this.lines.length - 1) return;
+
+    this.lines.splice(lineIdx, 1);
+    this.lines.splice(lineIdx + 1, 0, line);
+  }
+
   private getSelectionStart() {
     const lineIdx = this.lines.findIndex((line) => line.isSelected);
     const line = this.lines[lineIdx];

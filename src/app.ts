@@ -137,6 +137,22 @@ Alpine.magic("allowTabs", () => {
       );
       textArea.applyEditor(editor);
     },
+    ["@keydown.alt.up"](event: KeyboardEvent) {
+      event.preventDefault();
+      const textArea = new TextArea(event.target as HTMLTextAreaElement);
+      const editor = textArea.createEditor();
+      const lines = editor.selectedLines.reverse();
+      lines.forEach((line) => lines.forEach(() => editor.moveLineUp(line)));
+      textArea.applyEditor(editor);
+    },
+    ["@keydown.alt.down"](event: KeyboardEvent) {
+      event.preventDefault();
+      const textArea = new TextArea(event.target as HTMLTextAreaElement);
+      const editor = textArea.createEditor();
+      const lines = editor.selectedLines;
+      lines.forEach((line) => lines.forEach(() => editor.moveLineDown(line)));
+      textArea.applyEditor(editor);
+    },
   };
 });
 
