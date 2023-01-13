@@ -1,5 +1,7 @@
 import { Range } from "../types/range.types";
 
+const lineBreak = "\n";
+
 export class Editor {
   private lines: Line[];
 
@@ -26,7 +28,6 @@ export class Editor {
   insertLineAfter(newLine: Line, after: Line) {
     const lineIdx = this.lines.indexOf(after);
     this.lines.splice(lineIdx + 1, 0, newLine);
-    after.ensureLineBreak();
   }
 
   removeSelection() {
@@ -36,7 +37,11 @@ export class Editor {
   private getSelectionStart() {
     const lineIdx = this.lines.findIndex((line) => line.isSelected);
     const line = this.lines[lineIdx];
-    return this.lines.slice(0, lineIdx).join("").length + line.selection.start;
+    return (
+      this.lines.slice(0, lineIdx).join(lineBreak).length +
+      (lineIdx > 0 ? lineBreak.length : 0) +
+      line.selection.start
+    );
   }
 
   private getSelectionEnd() {
@@ -44,29 +49,29 @@ export class Editor {
       (line, idx, list) => line.isSelected && !list[idx + 1]?.isSelected
     );
     const line = this.lines[lineIdx];
-    return this.lines.slice(0, lineIdx).join("").length + line.selection.end;
+    return (
+      this.lines.slice(0, lineIdx).join(lineBreak).length +
+      (lineIdx > 0 ? lineBreak.length : 0) +
+      line.selection.end
+    );
   }
 
   toString() {
-    return this.lines.join("");
+    return this.lines.join(lineBreak);
   }
 }
 
 export class Line {
-  constructor(
-    private value: string,
-    private _selection: Selection,
-    private lineBreak = ""
-  ) {}
+  constructor(private value: string, private _selection: Selection) {}
 
   static fromRelativeSelection(text: string, relativeSelection: Selection) {
-    const { content, lineBreak } = extractLineBreak(text);
+    const { content } = extractLineBreak(text);
     const lineSelection = getLineSelection(content, relativeSelection);
-    return new Line(content, lineSelection, lineBreak);
+    return new Line(content, lineSelection);
   }
 
   static fromText(text: string) {
-    return new Line(text, new Selection(text.length, text.length), "\n");
+    return new Line(text, new Selection(text.length, text.length));
   }
 
   get selection() {
@@ -132,12 +137,8 @@ export class Line {
     this._selection = new Selection(this.value.length, this.value.length);
   }
 
-  ensureLineBreak() {
-    this.lineBreak ||= "\n";
-  }
-
   toString() {
-    return `${this.value}${this.lineBreak}`;
+    return this.value;
   }
 }
 
