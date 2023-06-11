@@ -2,8 +2,6 @@
 
 A simple web-based tree generator that lets you create ASCII folder trees.
 
-The app is available on https://tree.microkit.co/
-
 ## Example
 
 ```
